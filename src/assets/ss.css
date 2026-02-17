@@ -1,0 +1,17 @@
+/* Force increase dropdown width */
+.react-tel-input .country-list,
+.country-list {
+  max-width: 5000px !important;       /* change size as needed */
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  left: 0 !important;
+  right: auto !important;
+  z-index: 999999 !important;
+}
+
+/* Search input full width */
+.react-tel-input .country-list .search,
+.country-list .search {
+  width: 1200% !important;
+  box-sizing: border-box !important;
+}

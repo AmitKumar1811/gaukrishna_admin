@@ -1,0 +1,27 @@
+/* Phone input container */
+.react-tel-input {
+  width: 100% !important; /* full width */
+}
+
+/* Input box */
+.react-tel-input .form-control {
+  width: 100% !important;
+  background: #faf9f9 !important;   /* change background color */
+  border: 1px solid #C6D8DA !important;
+  border-radius: 18px !important;   /* increase radius */
+  padding: 20px 16px !important;
+  font-size: 15px !important;
+  color: #333 !important;
+}
+
+/* Flag dropdown button */
+.react-tel-input .flag-dropdown {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 18px 0 0 18px !important;
+}
+
+/* Dropdown menu */
+.react-tel-input .country-list {
+  color: black !important;
+}
