@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../store/authSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "../Firebase";
-// import { getFirebaseErrorMessage } from "../Firebase/fireBaseHandler";
+import api from "../../services/AxiosInstance";
+import { LOGIN } from "../../services/Admin/adminEndPoints";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -40,31 +39,30 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        setLoading(true); // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        const mockUser = {
-          uid: "dummy-user-123",
+        setLoading(true);
+        const response = await api.post(LOGIN, {
           email: values.email,
-          displayName: "Admin User",
-        };
-        const mockToken = "dummy-firebase-token-12345";
+          password: values.password,
+        });
 
-        console.log("Mock Login Successful");
+        // Match the format provided by user
+        const { user, accessToken, refreshToken } = response.data;
 
         dispatch(
           setCredentials({
-            token: mockToken,
-            user: mockUser,
+            token: accessToken,
+            refreshToken: refreshToken,
+            user: user,
           })
         );
+
         toast.success("Login successful");
-        navigate("/");
+        navigate("/", { replace: true });
         setLoading(false);
       } catch (err) {
         setLoading(false);
         console.error(err);
-        toast.error("Login failed. Please check your credentials.");
+        toast.error(err.response?.data?.message || "Login failed. Please check your credentials.");
       }
     },
   });

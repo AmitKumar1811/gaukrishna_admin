@@ -16,13 +16,17 @@ const categorySlice = createSlice({
             state.categories.push(action.payload);
         },
         updateCategory: (state, action) => {
-            const index = state.categories.findIndex((cat) => cat.id === action.payload.id);
+            const index = state.categories.findIndex((cat) =>
+                (cat.id === action.payload.id || cat._id === action.payload._id)
+            );
             if (index !== -1) {
                 state.categories[index] = action.payload;
             }
         },
         deleteCategory: (state, action) => {
-            state.categories = state.categories.filter((cat) => cat.id !== action.payload);
+            state.categories = state.categories.filter((cat) =>
+                (cat.id !== action.payload && cat._id !== action.payload)
+            );
         },
         setLoading: (state, action) => {
             state.loading = action.payload;
