@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { getPharmacyProfile, updatePharmacyProfile, uploadFile } from "../../services/Admin/adminServices";
-import {toast} from "react-toastify";
-import { uploadFileToS3 } from "../utils/imageUpload";
+import { getPharmacyProfile, updatePharmacyProfile } from "../../services/Admin/adminServices";
+import { toast } from "react-toastify";
+import { uploadFileToFirebase } from "../utils/imageUpload";
 import { ThreeDots } from "react-loader-spinner";
 import { loginSuccess } from "../store/profileSlice";
 import { useDispatch } from "react-redux";
@@ -12,22 +12,22 @@ const EditProfile = () => {
   const [licenseImage, setLicenseImage] = useState(null);
   const [gstImage, setGstImage] = useState(null);
   const [loading, setLoading] = useState(false)
-  const dispatch=useDispatch()
+  const dispatch = useDispatch()
   const [imgUploading, setImgUploading] = useState(false);
 
   const fetchProfile = async () => {
     try {
       setLoading(true)
       const res = await getPharmacyProfile();
- 
+
       const pharmacy = res.data;
 
-         dispatch(
-              loginSuccess({
-                user: res?.data,
-              
-              })
-            );
+      dispatch(
+        loginSuccess({
+          user: res?.data,
+
+        })
+      );
 
       formik.setValues({
         name: pharmacy.name || "",
@@ -51,7 +51,7 @@ const EditProfile = () => {
       image: null,
     },
     onSubmit: async (values) => {
-    
+
       try {
         const payload = {
           name: values.name,
@@ -63,8 +63,8 @@ const EditProfile = () => {
         console.log("✅ Updated profile response:", res);
 
         toast.success("Profile updated successfully!");
-       fetchProfile()
-       
+        fetchProfile()
+
 
       } catch (error) {
         console.error("❌ Update profile error:", error);
@@ -91,12 +91,10 @@ const EditProfile = () => {
       }
 
 
-          setImgUploading(true); 
-      const formData = new FormData();
-      formData.append("files", file);
+      setImgUploading(true);
 
       const key = `uploads/${Date.now()}_${file.name}`;
-      const fileUrl = await uploadFileToS3(file, key);
+      const fileUrl = await uploadFileToFirebase(file, key);
       console.log(fileUrl)
       if (fileUrl) {
 
@@ -109,8 +107,8 @@ const EditProfile = () => {
       console.log("error", error)
     }
     finally {
-    setImgUploading(false);  // stop loader
-  }
+      setImgUploading(false);  // stop loader
+    }
   };
 
   const handleLicenseChange = async (e) => {
@@ -119,14 +117,11 @@ const EditProfile = () => {
       if (!file) {
         return
       }
-      const formData = new FormData();
-      formData.append("files", file);
-      const res = await uploadFile(formData);
-      if (res) {
-        const filePath = res?.data?.files?.[0]?.path;
-        setLicenseImage((`
-https://api.meds15.com${filePath}`));
-        formik.setFieldValue("licenseImage", filePath);
+      const key = `license/${Date.now()}_${file.name}`;
+      const fileUrl = await uploadFileToFirebase(file, key);
+      if (fileUrl) {
+        setLicenseImage(fileUrl);
+        formik.setFieldValue("licenseImage", fileUrl);
       }
 
     } catch (error) {
@@ -141,14 +136,11 @@ https://api.meds15.com${filePath}`));
       if (!file) {
         return
       }
-      const formData = new FormData();
-      formData.append("files", file);
-      const res = await uploadFile(formData);
-      if (res) {
-        const filePath = res?.data?.files?.[0]?.path;
-        setGstImage((`
-https://api.meds15.com${filePath}`));
-        formik.setFieldValue("gstImage", filePath);
+      const key = `gst/${Date.now()}_${file.name}`;
+      const fileUrl = await uploadFileToFirebase(file, key);
+      if (fileUrl) {
+        setGstImage(fileUrl);
+        formik.setFieldValue("gstImage", fileUrl);
       }
 
     } catch (error) {
@@ -156,17 +148,17 @@ https://api.meds15.com${filePath}`));
     }
   };
 
-  if(loading){
-    return         <div className="flex justify-center items-center py-10 w-full">
-          <ThreeDots
-            height="60"
-            width="60"
-            radius="9"
-            visible={true}
-            ariaLabel="loading"
-            color="#298E9E"
-          />
-        </div>
+  if (loading) {
+    return <div className="flex justify-center items-center py-10 w-full">
+      <ThreeDots
+        height="60"
+        width="60"
+        radius="9"
+        visible={true}
+        ariaLabel="loading"
+        color="#298E9E"
+      />
+    </div>
   }
 
   return (
@@ -186,11 +178,11 @@ https://api.meds15.com${filePath}`));
                 <div className="w-32 h-32 rounded-full bg-[#E5E5E5] flex items-center justify-center text-[#5F5F5F] text-[14px]">No Image</div>
               )}
 
-               {imgUploading && (
-      <div className="absolute bg-[#ffffffb7] rounded-full w-32 h-32 flex items-center justify-center">
-        <ThreeDots height="40" width="40" radius="9" color="#298E9E" />
-      </div>
-    )}
+              {imgUploading && (
+                <div className="absolute bg-[#ffffffb7] rounded-full w-32 h-32 flex items-center justify-center">
+                  <ThreeDots height="40" width="40" radius="9" color="#298E9E" />
+                </div>
+              )}
             </label>
             <div className="text-[#012547] font-bold underline cursor-pointer" onClick={() => document.getElementById("pharmacyImageInput").click()}>
               Update Profile Image
