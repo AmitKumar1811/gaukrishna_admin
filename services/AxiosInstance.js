@@ -2,7 +2,7 @@ import axios from "axios";
 import { store } from "../src/store/store";
 
 const axiosInstance = axios.create({
-  baseURL: `https://backend-gau.onrender.com/api/v1`, // Update base URL for new project name
+  baseURL: `http://localhost:4000/api/v1`, // Update base URL for new project name
 });
 
 axiosInstance.interceptors.request.use(
