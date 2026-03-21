@@ -69,19 +69,11 @@ const Login = () => {
 
   return (
     <div
-      className="flex flex-col justify-between h-screen bg-cover bg-center bg-no-repeat relative"
-      style={{
-        backgroundImage: "url('/smart-remote.png')",
-      }}
+      className="flex flex-col justify-between h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black"
     >
-      {/* Overlay to ensure text is readable */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-0"></div>
-
       <div className="relative z-10 flex flex-col items-center justify-center flex-1 p-5 md:p-15 gap-5 md:gap-8">
         <div className="flex gap-2 mb-4">
-          {/* Logo placeholder or use actual logo with white filter if needed */}
-          <img className="max-w-70 drop-shadow-lg" src="/smartLogo.svg" alt="Logo" />
-          {/* <h1 className="text-4xl font-bold text-white tracking-wide">SMART TV <span className="text-[#9900FF] bg-white px-2 rounded">ADMIN</span></h1> */}
+          <h1 className="text-4xl font-bold text-white tracking-wide">Gau Krishna <span className="text-[#9900FF] bg-white px-2 rounded">ADMIN</span></h1>
         </div>
 
         <div className="bg-white/95 backdrop-blur-md p-8 md:p-10 gap-6 flex flex-col rounded-[24px] w-full max-w-md shadow-2xl border border-white/20">
