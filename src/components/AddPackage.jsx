@@ -427,7 +427,7 @@ const PackageForm = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" />
+        <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" />
       </div>
     );
   }
@@ -661,7 +661,7 @@ const PackageForm = () => {
                         className={`flex justify-center cursor-pointer items-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all shadow-sm
                           ${isUploading
                             ? "bg-purple-300 text-white cursor-not-allowed"
-                            : "bg-[#9900FF] text-white hover:bg-[#7f00d4] active:scale-95"
+                            : "bg-[#0f6845] text-white hover:bg-[#7f00d4] active:scale-95"
                           }`}
                       >
                         <i className="fa-solid fa-cloud-arrow-up"></i>

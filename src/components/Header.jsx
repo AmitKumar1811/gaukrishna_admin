@@ -42,7 +42,7 @@ export default function Header({ onMenuClick }) {
         <div className="flex items-center  gap-6">
           <button
             onClick={onMenuClick}
-            className="text-white cursor-pointer bg-[#9900FF] p-2 rounded-[6px] text-2xl"
+            className="text-white cursor-pointer bg-[#0f6845] p-2 rounded-[6px] text-2xl"
           >
             <FiMenu />
           </button>
@@ -72,7 +72,7 @@ export default function Header({ onMenuClick }) {
 
           {/* Profile Button */}
           <div
-            className="pl-5 flex items-center gap-2 bg-[#9900FF] text-[#FFFFFF] rounded-tl-[8px] rounded-bl-[8px] rounded-tr-[50px] rounded-br-[50px] cursor-pointer relative"
+            className="pl-5 flex items-center gap-2 bg-[#0f6845] text-[#FFFFFF] rounded-tl-[8px] rounded-bl-[8px] rounded-tr-[50px] rounded-br-[50px] cursor-pointer relative"
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             ref={menuRef}
           >

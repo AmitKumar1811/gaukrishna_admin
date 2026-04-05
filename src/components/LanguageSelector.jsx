@@ -59,7 +59,7 @@ const LanguageMultiSelect = ({ name, label = "Language" }) => {
         {value.map((lang) => (
           <span
             key={lang}
-            className="bg-[#9900FF] text-white px-3 py-1 rounded-full text-sm flex items-center gap-2"
+            className="bg-[#0f6845] text-white px-3 py-1 rounded-full text-sm flex items-center gap-2"
           >
             {lang}
             <button

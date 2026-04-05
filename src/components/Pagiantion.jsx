@@ -31,7 +31,7 @@ export default function Pagination({ pageCount, pageValue, setPage }) {
         pageLinkClassName="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
 
         activeClassName="!text-white"
-        activeLinkClassName="bg-[#9900FF] !text-white hover:!bg-[#9900FF] shadow-sm shadow-purple-200"
+        activeLinkClassName="bg-[#0f6845] !text-white hover:!bg-[#0f6845] shadow-sm shadow-purple-200"
 
         previousClassName="mr-2"
         nextClassName="ml-2"

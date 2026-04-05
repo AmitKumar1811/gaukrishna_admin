@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTransactions, setLoading } from "../store/transactionSlice";
 import api from "../../services/AxiosInstance";
@@ -11,37 +11,54 @@ const Transactions = () => {
     const dispatch = useDispatch();
     const { transactions, loading } = useSelector((state) => state.transactions);
     const [page, setPage] = useState(1);
-    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const limit = 10;
 
-    const fetchTransactions = async () => {
+    const fetchTransactions = useCallback(async () => {
         dispatch(setLoading(true));
         try {
             const response = await api.get(`${TRANSACTIONS}?page=${page}&limit=${limit}`);
-            dispatch(setTransactions(response.data.data || []));
-            setTotalItems(response.data.total || 0);
+            dispatch(setTransactions(response.data?.data || []));
+            const totalTransactions = response.data?.totalTransactions ?? response.data?.total ?? 0;
+            const pages =
+                response.data?.pages ??
+                (totalTransactions ? Math.ceil(totalTransactions / limit) : 1);
+            setTotalPages(pages || 1);
         } catch (error) {
             console.error(error);
             toast.error("Failed to fetch transactions");
         } finally {
             dispatch(setLoading(false));
         }
-    };
+    }, [dispatch, page]);
 
     useEffect(() => {
         fetchTransactions();
-    }, [dispatch, page]);
+    }, [fetchTransactions]);
 
     const getStatusColor = (status) => {
         switch (status?.toLowerCase()) {
             case "success": return "bg-green-100 text-green-700";
+            case "paid": return "bg-green-100 text-green-700";
+            case "completed": return "bg-green-100 text-green-700";
             case "pending": return "bg-yellow-100 text-yellow-700";
+            case "created": return "bg-yellow-100 text-yellow-700";
+            case "processing": return "bg-yellow-100 text-yellow-700";
             case "failed": return "bg-red-100 text-red-700";
+            case "cancelled": return "bg-red-100 text-red-700";
+            case "canceled": return "bg-red-100 text-red-700";
             default: return "bg-gray-100 text-gray-700";
         }
     };
 
-    const totalPages = Math.ceil(totalItems / limit);
+    const formatDateTime = (value) => {
+        if (!value) return "-";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "-";
+        return date.toLocaleString();
+    };
+
+    const getTxnStatus = (txn) => txn?.paymentStatus || txn?.orderStatus || txn?.status || "unknown";
 
     return (
         <div className="p-6">
@@ -66,7 +83,7 @@ const Transactions = () => {
                             <tr>
                                 <td colSpan="6" className="py-20 text-center">
                                     <div className="flex justify-center">
-                                        <ThreeDots height="50" width="50" radius="9" color="#9900FF" ariaLabel="three-dots-loading" visible={true} />
+                                        <ThreeDots height="50" width="50" radius="9" color="#0f6845" ariaLabel="three-dots-loading" visible={true} />
                                     </div>
                                 </td>
                             </tr>
@@ -78,18 +95,29 @@ const Transactions = () => {
                             </tr>
                         ) : (
                             transactions.map((txn) => (
-                                <tr key={txn.id} className="hover:bg-gray-50/50">
-                                    <td className="px-6 py-4 font-mono text-sm text-gray-600">{txn.transactionId || txn.id}</td>
+                                <tr
+                                    key={txn.razorpayPaymentId || txn.razorpayOrderId || txn.orderId || txn.id}
+                                    className="hover:bg-gray-50/50"
+                                >
+                                    <td className="px-6 py-4 font-mono text-sm text-gray-600">
+                                        {txn.razorpayPaymentId || txn.razorpayOrderId || txn.orderId || txn.transactionId || txn.id}
+                                    </td>
                                     <td className="px-6 py-4 text-gray-900">{txn.user?.name || "Unknown"}</td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900">₹{txn.amount}</td>
-                                    <td className="px-6 py-4 text-gray-500 capitalize">{txn.type || "Purchase"}</td>
+                                    <td className="px-6 py-4 font-semibold text-gray-900">
+                                        ₹{txn.totalAmount ?? txn.amount ?? 0}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-500 capitalize">{txn.type || "Order"}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold capitalize ${getStatusColor(txn.status)}`}>
-                                            {txn.status}
+                                        <span
+                                            className={`px-2.5 py-0.5 rounded-full text-xs font-bold capitalize ${getStatusColor(
+                                                getTxnStatus(txn),
+                                            )}`}
+                                        >
+                                            {getTxnStatus(txn)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-gray-500 text-sm">
-                                        {new Date(txn.createdAt).toLocaleDateString()}
+                                        {formatDateTime(txn.timestamp || txn.createdAt)}
                                     </td>
                                 </tr>
                             ))

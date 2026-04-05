@@ -22,5 +22,8 @@ export const TRANSACTIONS = "/admin/transactions";
 // Users
 export const USERS = "/admin/users";
 
+// Contacts
+export const CONTACTS = "/admin/contacts";
+
 // File Upload
 export const FILES = "/file-upload";

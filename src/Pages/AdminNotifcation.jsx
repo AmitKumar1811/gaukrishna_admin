@@ -171,7 +171,7 @@ export default function AdminNotifications() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
-              <Megaphone className="w-8 h-8 text-[#9900FF]" />
+              <Megaphone className="w-8 h-8 text-[#0f6845]" />
               Admin Communication
             </h1>
             <p className="text-gray-500 mt-2 text-lg">
@@ -180,10 +180,10 @@ export default function AdminNotifications() {
           </div>
 
           <div className="bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 flex items-center gap-2 text-sm font-medium text-gray-600">
-            <Users className="w-4 h-4 text-[#9900FF]" />
+            <Users className="w-4 h-4 text-[#0f6845]" />
             <span>Total Users: <b className="text-gray-900">{users.length}</b></span>
             <div className="h-4 w-px bg-gray-300 mx-2"></div>
-            <span>Selected: <b className="text-[#9900FF]">{selected.length}</b></span>
+            <span>Selected: <b className="text-[#0f6845]">{selected.length}</b></span>
           </div>
         </div>
 
@@ -212,18 +212,18 @@ export default function AdminNotifications() {
                 </div>
 
                 <div className="relative group">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#9900FF] transition-colors" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#0f6845] transition-colors" />
                   <input
                     type="text"
                     placeholder="Search users..."
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#9900FF]/20 focus:border-[#9900FF] outline-none transition-all placeholder:text-gray-400"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0f6845]/20 focus:border-[#0f6845] outline-none transition-all placeholder:text-gray-400"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                   />
                 </div>
 
                 <label className="flex items-center gap-3 p-3 bg-indigo-50/50 rounded-xl cursor-pointer hover:bg-indigo-50 transition-colors border border-transparent hover:border-indigo-100">
-                  <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${allFilteredSelected ? "bg-[#9900FF] border-[#9900FF]" : "bg-white border-gray-300"}`}>
+                  <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${allFilteredSelected ? "bg-[#0f6845] border-[#0f6845]" : "bg-white border-gray-300"}`}>
                     {allFilteredSelected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <input
@@ -242,7 +242,7 @@ export default function AdminNotifications() {
               <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
                 {loadingUsers ? (
                   <div className="flex flex-col items-center justify-center h-40 text-gray-400 gap-2">
-                    <Loader2 className="w-8 h-8 animate-spin text-[#9900FF]" />
+                    <Loader2 className="w-8 h-8 animate-spin text-[#0f6845]" />
                     <span className="text-sm">Loading users...</span>
                   </div>
                 ) : filteredUsers.length === 0 ? (
@@ -260,12 +260,12 @@ export default function AdminNotifications() {
                         key={u.id}
                         onClick={() => toggleUser(u.id)}
                         className={`group flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${isSelected
-                          ? "bg-[#F3E8FF] border-[#9900FF]/30 shadow-sm"
+                          ? "bg-[#F3E8FF] border-[#0f6845]/30 shadow-sm"
                           : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
                           }`}
                       >
                         <div className="flex items-center gap-3 overflow-hidden">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm shrink-0 transition-colors ${isSelected ? "bg-[#9900FF] text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm shrink-0 transition-colors ${isSelected ? "bg-[#0f6845] text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
                             }`}>
                             {initials}
                           </div>
@@ -277,7 +277,7 @@ export default function AdminNotifications() {
                           </div>
                         </div>
 
-                        <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${isSelected ? "bg-[#9900FF] border-[#9900FF]" : "bg-white border-gray-300 group-hover:border-gray-400"
+                        <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${isSelected ? "bg-[#0f6845] border-[#0f6845]" : "bg-white border-gray-300 group-hover:border-gray-400"
                           }`}>
                           {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                         </div>
@@ -295,13 +295,13 @@ export default function AdminNotifications() {
             {/* 🔔 Push Notification Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8 relative overflow-hidden transition-all hover:shadow-md">
               <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                <Bell className="w-32 h-32 text-[#9900FF]" />
+                <Bell className="w-32 h-32 text-[#0f6845]" />
               </div>
 
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-[#F3E8FF] rounded-lg">
-                    <Bell className="w-6 h-6 text-[#9900FF]" />
+                    <Bell className="w-6 h-6 text-[#0f6845]" />
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-gray-900">Push Notification</h2>
@@ -316,7 +316,7 @@ export default function AdminNotifications() {
                       value={pushTitle}
                       onChange={e => setPushTitle(e.target.value)}
                       placeholder="e.g. New Feature Alert! 🚀"
-                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#9900FF] focus:border-transparent outline-none transition-all placeholder:text-gray-300"
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0f6845] focus:border-transparent outline-none transition-all placeholder:text-gray-300"
                     />
                   </div>
                   <div>
@@ -326,7 +326,7 @@ export default function AdminNotifications() {
                       onChange={e => setPushBody(e.target.value)}
                       rows={3}
                       placeholder="Type your notification message here..."
-                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#9900FF] focus:border-transparent outline-none transition-all placeholder:text-gray-300 resize-none"
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0f6845] focus:border-transparent outline-none transition-all placeholder:text-gray-300 resize-none"
                     />
                   </div>
 
@@ -334,7 +334,7 @@ export default function AdminNotifications() {
                     <button
                       disabled={sendingPush || selected.length === 0}
                       onClick={sendNotification}
-                      className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#9900FF] text-white px-8 py-3 rounded-xl hover:bg-[#8000D4] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-purple-200 font-medium"
+                      className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#0f6845] text-white px-8 py-3 rounded-xl hover:bg-[#8000D4] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-purple-200 font-medium"
                     >
                       {sendingPush ? (
                         <>

@@ -73,7 +73,7 @@ const Login = () => {
     >
       <div className="relative z-10 flex flex-col items-center justify-center flex-1 p-5 md:p-15 gap-5 md:gap-8">
         <div className="flex gap-2 mb-4">
-          <h1 className="text-4xl font-bold text-white tracking-wide">Gau Krishna <span className="text-[#9900FF] bg-white px-2 rounded">ADMIN</span></h1>
+          <h1 className="text-4xl font-bold text-white tracking-wide">Gau Krishna <span className="text-[#0f6845] bg-white px-2 rounded">ADMIN</span></h1>
         </div>
 
         <div className="bg-white/95 backdrop-blur-md p-8 md:p-10 gap-6 flex flex-col rounded-[24px] w-full max-w-md shadow-2xl border border-white/20">
@@ -90,7 +90,7 @@ const Login = () => {
                 type="text"
                 name="email"
                 placeholder="Email Address"
-                className={`text-gray-700 bg-gray-50 w-full p-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9900FF] transition-all
+                className={`text-gray-700 bg-gray-50 w-full p-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0f6845] transition-all
                   ${formik.touched.email && formik.errors.email ? "border-red-500 bg-red-50" : "border-gray-200"}
                 `}
                 value={formik.values.email}
@@ -108,7 +108,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Password"
-                  className={`text-gray-700 bg-gray-50 w-full p-4 border rounded-xl pr-12 focus:outline-none focus:ring-2 focus:ring-[#9900FF] transition-all
+                  className={`text-gray-700 bg-gray-50 w-full p-4 border rounded-xl pr-12 focus:outline-none focus:ring-2 focus:ring-[#0f6845] transition-all
                     ${formik.touched.password && formik.errors.password ? "border-red-500 bg-red-50" : "border-gray-200"}
                   `}
                   value={formik.values.password}
@@ -133,7 +133,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={formik.isSubmitting}
-              className="text-white cursor-pointer text-[15px] font-semibold bg-[#9900FF] p-4 rounded-xl w-full mt-4 hover:bg-[#7f00d4] active:scale-95 transition-all shadow-lg shadow-purple-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="text-white cursor-pointer text-[15px] font-semibold bg-[#0f6845] p-4 rounded-xl w-full mt-4 hover:bg-[#7f00d4] active:scale-95 transition-all shadow-lg shadow-purple-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? "Signing in..." : "Login"}
             </button>

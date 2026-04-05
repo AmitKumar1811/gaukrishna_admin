@@ -458,13 +458,13 @@ const Package = () => {
         <div className="flex gap-5">
           <button
             onClick={() => navigate("/add-package")}
-            className="flex items-center gap-2 bg-[#9900FF] cursor-pointer hover:bg-[#7f00d4] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-2 bg-[#0f6845] cursor-pointer hover:bg-[#7f00d4] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
           >
             <i className="fa-solid fa-plus text-xs"></i> Add Package
           </button>
           <button
             onClick={downloadCSV}
-            className="flex items-center gap-2 bg-[#9900FF] hover:bg-[#7f00d4] cursor-pointer text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-2 bg-[#0f6845] hover:bg-[#7f00d4] cursor-pointer text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
               <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
@@ -486,7 +486,7 @@ const Package = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+                className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
               >
                 {/* Options need to be specific to Packages if Status exists on them, assuming same as Programs based on user code filtering */}
         {/* <option value="">All Status</option>
@@ -512,8 +512,8 @@ const Package = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full appearance-none bg-gray-50 border border-gray-200
         text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight
-        focus:outline-none focus:bg-white focus:border-[#9900FF]
-        focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+        focus:outline-none focus:bg-white focus:border-[#0f6845]
+        focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Status</option>
               <option value="upcoming">Upcoming</option>
@@ -536,7 +536,7 @@ const Package = () => {
             <select
               value={languageFilter}
               onChange={(e) => setLanguageFilter(e.target.value)}
-              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Languages</option>
               <option value="english">English</option>
@@ -560,8 +560,8 @@ const Package = () => {
               onChange={(e) => setType(e.target.value)}
               className="w-full appearance-none bg-gray-50 border border-gray-200
         text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight
-        focus:outline-none focus:bg-white focus:border-[#9900FF]
-        focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+        focus:outline-none focus:bg-white focus:border-[#0f6845]
+        focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All type</option>
               <option value="publish">Published</option>
@@ -582,7 +582,7 @@ const Package = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Categories</option>
               {categories?.map((cat) => (
@@ -602,7 +602,7 @@ const Package = () => {
             type="date"
             value={startDateFilter}
             onChange={(e) => setStartDateFilter(e.target.value)}
-            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
           />
         </div>
 
@@ -613,7 +613,7 @@ const Package = () => {
             type="date"
             value={endDateFilter}
             onChange={(e) => setEndDateFilter(e.target.value)}
-            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
           />
         </div>
 
@@ -658,7 +658,7 @@ const Package = () => {
                 <tr>
                   <td colSpan="11" >
                     <div className="flex justify-center items-center py-20">
-                      <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" ariaLabel="three-dots-loading" />
+                      <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" ariaLabel="three-dots-loading" />
                     </div>
                   </td>
                 </tr>
@@ -671,7 +671,7 @@ const Package = () => {
                         <code className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded border border-gray-200 truncate max-w-[100px]" title={user?._id}>
                           {user?._id ? user?._id : "_"}
                         </code>
-                        <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#9900FF] text-[10px] transition-colors"></i>
+                        <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#0f6845] text-[10px] transition-colors"></i>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">{user?.packageName ? user?.packageName : "_"} </td>
@@ -748,7 +748,7 @@ const Package = () => {
   ${index >= users.length - 2 ? "bottom-0 origin-bottom-right" : "top-0 origin-top-right"}`}
                         >
 
-                          <button onClick={() => navigate(`/package/${user?._id}`)} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 hover:text-[#9900FF] flex items-center gap-2"  >
+                          <button onClick={() => navigate(`/package/${user?._id}`)} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 hover:text-[#0f6845] flex items-center gap-2"  >
                             <i className="fa-regular fa-eye w-4"></i> View
                           </button>
 
@@ -820,7 +820,7 @@ const Package = () => {
                   if (confirmAction) confirmAction();
                   setConfirmModalOpen(false);
                 }}
-                className="px-4 cursor-pointer py-2 bg-[#9900FF] text-white rounded-xl text-sm font-medium hover:bg-[#7f00d4] transition-colors"
+                className="px-4 cursor-pointer py-2 bg-[#0f6845] text-white rounded-xl text-sm font-medium hover:bg-[#7f00d4] transition-colors"
               >
                 Yes
               </button>

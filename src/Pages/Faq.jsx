@@ -109,7 +109,7 @@ const Faq = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
           <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-            {editId ? <i className="fa-regular fa-pen-to-square text-[#9900FF]"></i> : <i className="fa-solid fa-plus text-[#9900FF]"></i>}
+            {editId ? <i className="fa-regular fa-pen-to-square text-[#0f6845]"></i> : <i className="fa-solid fa-plus text-[#0f6845]"></i>}
             {editId ? "Edit FAQ" : "Add New FAQ"}
           </h3>
 
@@ -119,7 +119,7 @@ const Faq = () => {
               <input
                 type="text"
                 placeholder="e.g. How do I reset my password?"
-                className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#9900FF] focus:border-[#9900FF] block p-3 transition-colors outline-none hover:bg-white"
+                className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#0f6845] focus:border-[#0f6845] block p-3 transition-colors outline-none hover:bg-white"
                 value={form.question}
                 onChange={(e) => setForm({ ...form, question: e.target.value })}
               />
@@ -130,7 +130,7 @@ const Faq = () => {
               <textarea
                 rows={4}
                 placeholder="Enter the answer here..."
-                className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#9900FF] focus:border-[#9900FF] block p-3 transition-colors outline-none hover:bg-white resize-none"
+                className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#0f6845] focus:border-[#0f6845] block p-3 transition-colors outline-none hover:bg-white resize-none"
                 value={form.answer}
                 onChange={(e) => setForm({ ...form, answer: e.target.value })}
               />
@@ -139,7 +139,7 @@ const Faq = () => {
             <div className="flex gap-3 pt-2">
               <button
                 type="submit"
-                className="flex cursor-pointer items-center gap-2 bg-[#9900FF] hover:bg-[#7f00d4] text-white px-6 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95 disabled:opacity-50"
+                className="flex cursor-pointer items-center gap-2 bg-[#0f6845] hover:bg-[#7f00d4] text-white px-6 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95 disabled:opacity-50"
                 disabled={!form.question || !form.answer}
               >
                 <i className="fa-regular  fa-paper-plane text-xs"></i>
@@ -167,7 +167,7 @@ const Faq = () => {
 
           {loading ? (
             <div className="bg-white rounded-2xl p-10 flex justify-center">
-              <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" />
+              <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" />
             </div>
           ) : faqs.length === 0 ? (
             <div className="bg-white rounded-2xl p-10 text-center border border-gray-100 border-dashed">

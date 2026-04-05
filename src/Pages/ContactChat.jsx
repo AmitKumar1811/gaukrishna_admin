@@ -190,7 +190,7 @@ const ContactChat = () => {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-50/50 backdrop-blur-sm z-50">
         <div className="text-center p-8 bg-white rounded-2xl shadow-xl">
-          <div className="w-12 h-12 rounded-full border-4 border-purple-100 border-t-[#9900FF] animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 rounded-full border-4 border-purple-100 border-t-[#0f6845] animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading conversation...</p>
         </div>
       </div>
@@ -208,14 +208,14 @@ const ContactChat = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate(-1)}
-                className="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-500 hover:text-[#9900FF] transition-colors"
+                className="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-500 hover:text-[#0f6845] transition-colors"
               >
                 <ArrowLeftIcon className="w-5 h-5" />
               </button>
 
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#9900FF] to-purple-600 flex items-center justify-center text-white font-bold shadow-lg shadow-purple-200">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0f6845] to-purple-600 flex items-center justify-center text-white font-bold shadow-lg shadow-purple-200">
                     {contact?.name?.[0]?.toUpperCase() || <UserCircleIcon className="w-6 h-6" />}
                   </div>
                   <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
@@ -271,7 +271,7 @@ const ContactChat = () => {
                     <div className={`flex flex-col gap-1 max-w-[85%] sm:max-w-[70%]`}>
                       <div
                         className={`px-5 py-3.5 text-[15px] leading-relaxed shadow-sm relative ${isAdmin
-                          ? "bg-[#9900FF] text-white rounded-2xl rounded-tr-sm"
+                          ? "bg-[#0f6845] text-white rounded-2xl rounded-tr-sm"
                           : "bg-white text-slate-700 border border-slate-100 rounded-2xl rounded-tl-sm"
                           }`}
                       >
@@ -303,7 +303,7 @@ const ContactChat = () => {
             }}
             className="flex gap-2 items-end max-w-4xl mx-auto relative"
           >
-            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl focus-within:ring-2 focus-within:ring-[#9900FF]/20 focus-within:border-[#9900FF] transition-all flex items-center pr-2">
+            <div className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl focus-within:ring-2 focus-within:ring-[#0f6845]/20 focus-within:border-[#0f6845] transition-all flex items-center pr-2">
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -327,7 +327,7 @@ const ContactChat = () => {
               disabled={!text.trim() || isSending}
               className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all ${!text.trim() || isSending
                 ? "bg-slate-100 text-slate-300 cursor-not-allowed"
-                : "bg-[#9900FF] text-white hover:bg-[#8000d4] shadow-lg shadow-purple-200 hover:scale-105 active:scale-95"
+                : "bg-[#0f6845] text-white hover:bg-[#8000d4] shadow-lg shadow-purple-200 hover:scale-105 active:scale-95"
                 }`}
             >
               {isSending ? (
@@ -340,7 +340,7 @@ const ContactChat = () => {
 
           <p className="text-center text-[10px] text-slate-400 mt-2">
             Press <span className="font-semibold text-slate-600">Enter</span> to send.
-            Reply will be sent to <span className="font-medium text-[#9900FF]">{contact?.email}</span>
+            Reply will be sent to <span className="font-medium text-[#0f6845]">{contact?.email}</span>
           </p>
         </div>
       </div>

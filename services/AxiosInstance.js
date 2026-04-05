@@ -2,8 +2,10 @@ import axios from "axios";
 import { store } from "../src/store/store";
 
 const axiosInstance = axios.create({
-  baseURL: `http://localhost:4000/api/v1`, // Update base URL for new project name
+  baseURL: `https://backend-gau.onrender.com/api/v1`,
 });
+
+
 
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -11,7 +13,7 @@ axiosInstance.interceptors.request.use(
     const token = state.auth?.token;
 
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`; // Standard Bearer token
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
 
     // Set Content-Type based on data type

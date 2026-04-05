@@ -15,12 +15,15 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from './Pages/Login.jsx';
 import Dashboard from './Pages/Dashboard.jsx';
 import Users from './Pages/Users.jsx';
+import UserDetail from './Pages/UserDetail.jsx';
 import Products from './Pages/Products.jsx';
 import AddEditProduct from './Pages/AddEditProduct.jsx';
 import Categories from './Pages/Categories.jsx';
 import Orders from './Pages/Orders.jsx';
 import Blogs from './Pages/Blogs.jsx';
 import Transactions from './Pages/Transactions.jsx';
+import OrderDetail from './Pages/OrderDetail.jsx';
+import ContactUs from './Pages/ContactUs.jsx';
 
 const PrivateRoute = ({ children }) => {
   const token = useSelector((state) => state.auth.token);
@@ -68,14 +71,16 @@ function Root() {
             <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
-            <Route path="/users/:id" element={<PrivateRoute><Users /></PrivateRoute>} /> {/* Placeholder for detail, reusing Users for now */}
+            <Route path="/users/:id" element={<PrivateRoute><UserDetail /></PrivateRoute>} />
             <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
             <Route path="/products/add" element={<PrivateRoute><AddEditProduct /></PrivateRoute>} />
             <Route path="/products/edit/:slug" element={<PrivateRoute><AddEditProduct /></PrivateRoute>} />
             <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
             <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
+            <Route path="/orders/:id" element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
             <Route path="/blogs" element={<PrivateRoute><Blogs /></PrivateRoute>} />
             <Route path="/transactions" element={<PrivateRoute><Transactions /></PrivateRoute>} />
+            <Route path="/contact-us" element={<PrivateRoute><ContactUs /></PrivateRoute>} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

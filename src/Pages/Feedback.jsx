@@ -256,7 +256,7 @@ const Feedback = () => {
         </div>
         <button
           onClick={downloadCSV}
-          className="flex items-center gap-2 bg-[#9900FF] hover:bg-[#7f00d4] cursor-pointer text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
+          className="flex items-center gap-2 bg-[#0f6845] hover:bg-[#7f00d4] cursor-pointer text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
@@ -286,7 +286,7 @@ const Feedback = () => {
                 <tr>
                   <td colSpan="7">
                     <div className="flex justify-center items-center py-20">
-                      <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" ariaLabel="three-dots-loading" />
+                      <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" ariaLabel="three-dots-loading" />
                     </div>
                   </td>
                 </tr>
@@ -299,7 +299,7 @@ const Feedback = () => {
                         <code className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded border border-gray-200 truncate max-w-[100px]" title={fb._id}>
                           {fb._id}
                         </code>
-                        <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#9900FF] text-[10px] transition-colors"></i>
+                        <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#0f6845] text-[10px] transition-colors"></i>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -309,7 +309,7 @@ const Feedback = () => {
                             {getInitials(fb.user.name)}
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-sm font-medium text-gray-900 group-hover/user:text-[#9900FF] transition-colors">{fb.user.name}</span>
+                            <span className="text-sm font-medium text-gray-900 group-hover/user:text-[#0f6845] transition-colors">{fb.user.name}</span>
                             <span className="text-xs text-gray-500">{fb.user.email}</span>
                           </div>
                         </div>
@@ -348,7 +348,7 @@ const Feedback = () => {
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => openModal(fb)}
-                        className="inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-50 text-[#9900FF] hover:bg-purple-100 transition-colors"
+                        className="inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-50 text-[#0f6845] hover:bg-purple-100 transition-colors"
                       >
                         <i className="fa-regular fa-eye"></i> View
                       </button>

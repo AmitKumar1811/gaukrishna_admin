@@ -88,7 +88,7 @@ const Coupons = () => {
       toast.error("Failed to delete Coupon");
     }
   };
-   const CouponSchema = Yup.object({
+  const CouponSchema = Yup.object({
     code: Yup.string().required("Coupon code is required"),
     type: Yup.string().required("Discount type is required"),
     value: Yup.number()
@@ -167,7 +167,7 @@ const Coupons = () => {
                       <Field
                         name="code"
                         placeholder="e.g. SUMMER2024"
-                        className="flex-1 w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 outline-none transition-all placeholder:text-gray-300"
+                        className="flex-1 w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 outline-none transition-all placeholder:text-gray-300"
                       />
 
                       <button
@@ -176,7 +176,7 @@ const Coupons = () => {
                           const code = generateCouponCode();
                           setFieldValue("code", code);
                         }}
-                        className="px-4 py-3 cursor-pointer rounded-xl border border-purple-100 bg-purple-50 text-sm font-semibold text-[#9900FF] hover:bg-purple-100 transition-colors whitespace-nowrap"
+                        className="px-4 py-3 cursor-pointer rounded-xl border border-purple-100 bg-purple-50 text-sm font-semibold text-[#0f6845] hover:bg-purple-100 transition-colors whitespace-nowrap"
                       >
                         Generate
                       </button>
@@ -198,7 +198,7 @@ const Coupons = () => {
                       <Field
                         as="select"
                         name="type"
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 outline-none transition-all appearance-none"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 outline-none transition-all appearance-none"
                       >
                         <option value="">Select Type</option>
                         <option value="flat">Flat Amount (₹)</option>
@@ -223,7 +223,7 @@ const Coupons = () => {
                   <Field
                     as="select"
                     name="applicable"
-                    className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#9900FF] outline-none"
+                    className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845] outline-none"
                   >
                     <option value="">Select </option>
                     <option value="package">Package</option>
@@ -246,7 +246,7 @@ const Coupons = () => {
                         name="value"
                         type="number"
                         placeholder="0"
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 outline-none transition-all"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 outline-none transition-all"
                       />
                       <ErrorMessage
                         name="value"
@@ -261,7 +261,7 @@ const Coupons = () => {
                       <Field
                         type="date"
                         name="expiry"
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 outline-none transition-all text-gray-600"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 outline-none transition-all text-gray-600"
                       />
                       <ErrorMessage
                         name="expiry"
@@ -282,7 +282,7 @@ const Coupons = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-6 py-2.5 rounded-xl cursor-pointer bg-[#9900FF] text-white text-sm font-medium hover:bg-[#8000d4] shadow-md shadow-purple-200 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="px-6 py-2.5 rounded-xl cursor-pointer bg-[#0f6845] text-white text-sm font-medium hover:bg-[#8000d4] shadow-md shadow-purple-200 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? <ThreeDots height="20" width="20" color="#fff" /> : (isEditing ? "Update Coupon" : "Create Coupon")}
                   </button>
@@ -362,7 +362,7 @@ const Coupons = () => {
             setIsEditing(false);
             setShowModal(true);
           }}
-          className="flex items-center gap-2 bg-[#9900FF] cursor-pointer hover:bg-[#7f00d4] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
+          className="flex items-center gap-2 bg-[#0f6845] cursor-pointer hover:bg-[#7f00d4] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
         >
           <i className="fa-solid fa-plus text-xs"></i> Add Coupon
         </button>
@@ -389,7 +389,7 @@ const Coupons = () => {
                 <tr>
                   <td colSpan="6">
                     <div className="flex justify-center items-center py-20">
-                      <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" ariaLabel="three-dots-loading" />
+                      <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" ariaLabel="three-dots-loading" />
                     </div>
                   </td>
                 </tr>
@@ -404,7 +404,7 @@ const Coupons = () => {
                           <code className="text-sm font-mono font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded border border-gray-200">
                             {coupon?.code}
                           </code>
-                          <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#9900FF] text-[10px] transition-colors"></i>
+                          <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#0f6845] text-[10px] transition-colors"></i>
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -428,7 +428,7 @@ const Coupons = () => {
                         <div className="flex justify-end gap-2">
                           <button
                             onClick={() => handleEdit(coupon)}
-                            className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-gray-400 hover:text-[#9900FF] hover:bg-purple-50 transition-colors"
+                            className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-gray-400 hover:text-[#0f6845] hover:bg-purple-50 transition-colors"
                             title="Edit"
                           >
                             <i className="fa-regular fa-pen-to-square"></i>

@@ -70,7 +70,7 @@ const Products = () => {
                 </div>
                 <button
                     onClick={handleOpenAdd}
-                    className="cursor-pointer bg-[#9900FF] text-white px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-all shadow-sm flex items-center gap-2 font-medium"
+                    className="cursor-pointer bg-[#0f6845] text-white px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-all shadow-sm flex items-center gap-2 font-medium"
                 >
                     <span className="text-xl">+</span> Add Product
                 </button>

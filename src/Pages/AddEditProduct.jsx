@@ -13,6 +13,9 @@ import {
     ExclamationCircleIcon as ExclamationIcon,
 } from "@heroicons/react/24/outline";
 import { uploadFileToFirebase } from "../utils/imageUpload";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
 
 
 const AddEditProduct = () => {
@@ -171,7 +174,19 @@ const AddEditProduct = () => {
         }
     };
 
+    const handleDescriptionChange = (content) => {
+        setFormData(prev => ({ ...prev, description: content }));
+        if (formErrors.description) {
+            setFormErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.description;
+                return newErrors;
+            });
+        }
+    };
+
     const handleAttributeChange = (index, field, value) => {
+
         const newAttributes = [...formData.attributes];
         newAttributes[index][field] = value;
         setFormData(prev => ({ ...prev, attributes: newAttributes }));
@@ -232,7 +247,7 @@ const AddEditProduct = () => {
         if (!formData.stock || Number(formData.stock) < 0) {
             errors.stock = "Valid stock quantity is required";
         }
-        if (!formData.description.trim()) {
+        if (!formData.description.replace(/<(.|\n)*?>/g, '').trim()) {
             errors.description = "Description is required";
         }
 
@@ -632,37 +647,45 @@ const AddEditProduct = () => {
                             </div>
 
                             {/* ============= Description ============= */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <FormField
-                                    label="Short Description"
-                                >
-                                    <textarea
-                                        name="short_description"
-                                        value={formData.short_description}
-                                        onChange={handleInputChange}
-                                        placeholder="A brief catchy description..."
-                                        rows="5"
-                                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none resize-none"
-                                    />
-                                </FormField>
-                                <FormField
-                                    label="Main Description"
-                                    error={formErrors.description}
-                                    required
-                                >
-                                    <textarea
-                                        name="description"
+
+                            <FormField
+                                label="Short Description"
+                            >
+                                <textarea
+                                    name="short_description"
+                                    value={formData.short_description}
+                                    onChange={handleInputChange}
+                                    placeholder="A brief catchy description..."
+                                    rows="5"
+                                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none resize-none"
+                                />
+                            </FormField>
+                            <FormField
+                                label="Main Description"
+                                error={formErrors.description}
+                                required
+                            >
+                                <div className="bg-white rounded-lg">
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.description}
-                                        onChange={handleInputChange}
+                                        onChange={handleDescriptionChange}
                                         placeholder="Write a detailed product description, features, and benefits..."
-                                        rows="5"
-                                        className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none resize-none ${formErrors.description
-                                            ? "border-red-300 bg-red-50"
-                                            : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
-                                            }`}
+                                        className={`quill-editor ${formErrors.description ? "border-red-300" : "border-gray-200"}`}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [1, 2, 3, false] }],
+                                                ['bold', 'italic', 'underline', 'strike'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                [{ 'color': [] }, { 'background': [] }],
+                                                ['link', 'clean']
+                                            ],
+                                        }}
+                                        style={{ height: '300px', marginBottom: '45px' }}
                                     />
-                                </FormField>
-                            </div>
+                                </div>
+                            </FormField>
+
 
                             {/* ============= SEO ============= */}
                             <div className="bg-gray-50 p-6 lg:p-8 rounded-xl border border-gray-100">

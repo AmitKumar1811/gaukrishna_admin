@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories, setLoading, addCategory, updateCategory, deleteCategory } from "../store/categorySlice";
 import api from "../../services/AxiosInstance";
 import { CATEGORIES } from "../../services/Admin/adminEndPoints";
 import { toast } from "react-toastify";
 import { XMarkIcon, PhotoIcon } from "@heroicons/react/24/outline";
+import { uploadFileToFirebase } from "../utils/imageUpload";
 
 const Categories = () => {
     const dispatch = useDispatch();
@@ -27,24 +28,27 @@ const Categories = () => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         dispatch(setLoading(true));
         try {
             const response = await api.get(CATEGORIES);
-            // Handling nested structure: response.data.data.categories
-            const categoryData = response.data?.data?.categories || response.data?.data || [];
-            dispatch(setCategories(Array.isArray(categoryData) ? categoryData : []));
+            // Handle both nested structure and direct array format
+            const categoryData = Array.isArray(response.data)
+                ? response.data
+                : (response.data?.data?.categories || response.data?.data || []);
+
+            dispatch(setCategories(categoryData));
         } catch (error) {
             console.error(error);
             toast.error("Failed to fetch categories");
         } finally {
             dispatch(setLoading(false));
         }
-    };
+    }, [dispatch]);
 
     useEffect(() => {
         fetchCategories();
-    }, [dispatch]);
+    }, [fetchCategories]);
 
     const handleOpenAddModal = () => {
         setIsEditMode(false);
@@ -90,21 +94,22 @@ const Categories = () => {
         setIsSubmitting(true);
 
         try {
-            let data;
-
+            let imageUrl;
             if (formData.image) {
-                // Use FormData for image upload
-                data = new FormData();
-                data.append("name", formData.name);
-                data.append("slug", formData.slug);
-                data.append("image", formData.image);
-            } else {
-                // Use JSON for text-only updates
-                data = {
-                    name: formData.name,
-                    slug: formData.slug
-                };
+                const extension = formData.image.name?.split(".").pop();
+                const safeSlug = (formData.slug || "category")
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")
+                    .replace(/[^\w-]+/g, "");
+                const fileName = `${safeSlug}-${Date.now()}${extension ? `.${extension}` : ""}`;
+                imageUrl = await uploadFileToFirebase(formData.image, `categories/${fileName}`);
             }
+
+            const data = {
+                name: formData.name,
+                slug: formData.slug,
+                ...(imageUrl ? { image: imageUrl } : {}),
+            };
 
             if (isEditMode) {
                 const response = await api.put(`${CATEGORIES}/${selectedCategory._id || selectedCategory.id}`, data);
@@ -155,7 +160,7 @@ const Categories = () => {
                 </div>
                 <button
                     onClick={handleOpenAddModal}
-                    className="cursor-pointer bg-[#9900FF] text-white px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-all shadow-sm flex items-center gap-2 font-medium"
+                    className="cursor-pointer bg-[#0f6845] text-white px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-all shadow-sm flex items-center gap-2 font-medium"
                 >
                     <span className="text-xl">+</span> Add Category
                 </button>
@@ -168,6 +173,7 @@ const Categories = () => {
                             <th className="px-6 py-4">Image</th>
                             <th className="px-6 py-4">Name</th>
                             <th className="px-6 py-4">Slug</th>
+                            <th className="px-6 py-4">Created At</th>
                             <th className="px-6 py-4">Status</th>
                             <th className="px-6 py-4 text-right">Actions</th>
                         </tr>
@@ -206,17 +212,20 @@ const Categories = () => {
                                             />
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 font-medium text-gray-900">{category.name}</td>
+                                    <td className="px-6 py-4 font-medium text-gray-900 capitalize">{category.name}</td>
                                     <td className="px-6 py-4 text-gray-500 font-mono text-sm">{category.slug}</td>
+                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                        {category.createdAt ? new Date(category.createdAt).toLocaleDateString() : "N/A"}
+                                    </td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${category.isActive
-                                                ? "bg-green-50 text-green-700 border-green-100"
-                                                : "bg-red-50 text-red-700 border-red-100"
+                                            ? "bg-green-50 text-green-700 border-green-100"
+                                            : "bg-red-50 text-red-700 border-red-100"
                                             }`}>
                                             {category.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right">
+                                    <td className="px-6 py-4 text-right whitespace-nowrap">
                                         <button
                                             onClick={() => handleOpenEditModal(category)}
                                             className="text-blue-600 hover:text-blue-800 font-medium mr-4 transition-colors"
@@ -236,8 +245,6 @@ const Categories = () => {
                     </tbody>
                 </table>
             </div>
-
-            {/* Add / Edit Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
@@ -326,7 +333,7 @@ const Categories = () => {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="flex-1 px-4 py-2.5 rounded-xl bg-[#9900FF] text-white font-semibold hover:bg-purple-700 transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-70"
+                                    className="flex-1 px-4 py-2.5 rounded-xl bg-[#0f6845] text-white font-semibold hover:bg-purple-700 transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-70"
                                 >
                                     {isSubmitting ? (
                                         <>

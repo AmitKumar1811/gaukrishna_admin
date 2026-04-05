@@ -14,6 +14,7 @@ const userSlice = createSlice({
         setUsers: (state, action) => {
             state.users = action.payload.users;
             state.totalUsers = action.payload.total;
+            if (action.payload.limit) state.limit = action.payload.limit;
             state.loading = false;
         },
         setPage: (state, action) => {

@@ -184,7 +184,7 @@ const TransactionNotes = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-[#f8f9fa]">
-        <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" />
+        <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" />
       </div>
     );
   }
@@ -209,10 +209,10 @@ const TransactionNotes = () => {
             {/* Transaction ID with Copy */}
             <div className="flex items-center gap-2 mt-2 group cursor-pointer w-fit" onClick={() => copyToClipboard(transactionData.transactionId || transactionData.id)}>
               <span className="text-gray-500 text-sm font-medium">Topic ID:</span>
-              <code className="text-sm font-mono text-gray-700 bg-white border border-gray-200 px-2 py-0.5 rounded shadow-sm group-hover:border-[#9900FF] transition-colors">
+              <code className="text-sm font-mono text-gray-700 bg-white border border-gray-200 px-2 py-0.5 rounded shadow-sm group-hover:border-[#0f6845] transition-colors">
                 {transactionData.transactionId || transactionData.id}
               </code>
-              <i className="fa-regular fa-copy text-gray-400 text-xs group-hover:text-[#9900FF] transition-colors"></i>
+              <i className="fa-regular fa-copy text-gray-400 text-xs group-hover:text-[#0f6845] transition-colors"></i>
             </div>
           </div>
           <button
@@ -257,7 +257,7 @@ const TransactionNotes = () => {
               {userData ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
                   <div className="flex items-center gap-4 col-span-2 mb-2">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#9900FF]/10 to-blue-50 text-[#9900FF] flex items-center justify-center text-xl font-bold">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0f6845]/10 to-blue-50 text-[#0f6845] flex items-center justify-center text-xl font-bold">
                       {userData.name ? userData.name.charAt(0).toUpperCase() : "U"}
                     </div>
                     <div>
@@ -327,7 +327,7 @@ const TransactionNotes = () => {
                         value={refundAmount}
                         onChange={(e) => setRefundAmount(e.target.value)}
                         placeholder="0.00"
-                        className="w-full pl-7 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF] outline-none"
+                        className="w-full pl-7 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845] outline-none"
                       />
                     </div>
                   </div>
@@ -337,7 +337,7 @@ const TransactionNotes = () => {
                       value={refundNote}
                       onChange={(e) => setRefundNote(e.target.value)}
                       placeholder="Enter reason for refund..."
-                      className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF] outline-none min-h-[80px] resize-none"
+                      className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845] outline-none min-h-[80px] resize-none"
                     ></textarea>
                   </div>
                   <button
@@ -357,7 +357,7 @@ const TransactionNotes = () => {
             {/* Internal Notes Section */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col h-[500px]">
               <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <i className="fa-regular fa-comments text-[#9900FF]"></i> Review Notes
+                <i className="fa-regular fa-comments text-[#0f6845]"></i> Review Notes
               </h3>
 
               <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-4 mb-4">
@@ -380,14 +380,14 @@ const TransactionNotes = () => {
                 <div className="relative">
                   <textarea
                     placeholder="Add a note..."
-                    className="w-full min-h-[80px] bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF] block p-3 outline-none resize-none"
+                    className="w-full min-h-[80px] bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845] block p-3 outline-none resize-none"
                     value={internalNote}
                     onChange={(e) => setInternalNote(e.target.value)}
                   />
                   <button
                     onClick={handleSendNote}
                     disabled={!internalNote.trim()}
-                    className="absolute right-2 bottom-2 w-8 h-8 flex items-center justify-center bg-[#9900FF] text-white rounded-lg hover:bg-[#7f00d4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="absolute right-2 bottom-2 w-8 h-8 flex items-center justify-center bg-[#0f6845] text-white rounded-lg hover:bg-[#7f00d4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <i className="fa-solid fa-paper-plane text-xs"></i>
                   </button>
@@ -417,7 +417,7 @@ const InfoItem = ({ label, value, copyable, capitalize, className = "" }) => {
           {value || "N/A"}
         </div>
         {copyable && value && (
-          <button onClick={handleCopy} className="text-gray-300 hover:text-[#9900FF] transition-colors opacity-0 group-hover:opacity-100" title="Copy">
+          <button onClick={handleCopy} className="text-gray-300 hover:text-[#0f6845] transition-colors opacity-0 group-hover:opacity-100" title="Copy">
             <i className="fa-regular fa-copy text-xs"></i>
           </button>
         )}

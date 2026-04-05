@@ -295,7 +295,7 @@ const Programs = () => {
         <div className="flex gap-3">
           <button
             onClick={() => navigate("/add-programs")}
-            className="flex items-center gap-2 cursor-pointer bg-[#9900FF] hover:bg-[#7f00d4] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-2 cursor-pointer bg-[#0f6845] hover:bg-[#7f00d4] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
           >
             <i className="fa-solid fa-plus text-xs"></i> Add Programs
           </button>
@@ -316,7 +316,7 @@ const Programs = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Status</option>
               <option value="Live">Live</option>
@@ -335,7 +335,7 @@ const Programs = () => {
             <select
               value={languageFilter}
               onChange={(e) => setLanguageFilter(e.target.value)}
-              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Languages</option>
               <option value="english">English</option>
@@ -358,8 +358,8 @@ const Programs = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full appearance-none bg-gray-50 border border-gray-200
         text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight
-        focus:outline-none focus:bg-white focus:border-[#9900FF]
-        focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+        focus:outline-none focus:bg-white focus:border-[#0f6845]
+        focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Status</option>
               <option value="upcoming">Upcoming</option>
@@ -384,8 +384,8 @@ const Programs = () => {
               onChange={(e) => setType(e.target.value)}
               className="w-full appearance-none bg-gray-50 border border-gray-200
         text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight
-        focus:outline-none focus:bg-white focus:border-[#9900FF]
-        focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+        focus:outline-none focus:bg-white focus:border-[#0f6845]
+        focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All type</option>
               <option value="publish">Published</option>
@@ -404,7 +404,7 @@ const Programs = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+              className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
             >
               <option value="">All Categories</option>
               {categories?.map((cat) => (
@@ -425,7 +425,7 @@ const Programs = () => {
             type="date"
             value={startDateFilter}
             onChange={(e) => setStartDateFilter(e.target.value)}
-            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
           />
         </div>
 
@@ -435,7 +435,7 @@ const Programs = () => {
             type="date"
             value={endDateFilter}
             onChange={(e) => setEndDateFilter(e.target.value)}
-            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#9900FF] focus:ring-1 focus:ring-[#9900FF]/20 transition-all text-sm"
+            className="bg-gray-50 border border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-[#0f6845] focus:ring-1 focus:ring-[#0f6845]/20 transition-all text-sm"
           />
         </div>
 
@@ -503,7 +503,7 @@ const Programs = () => {
                         width="50"
                         radius="9"
                         visible={true}
-                        color="#9900FF"
+                        color="#0f6845"
                         ariaLabel="three-dots-loading"
                       />
                     </div>
@@ -520,7 +520,7 @@ const Programs = () => {
                         <code className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded border border-gray-200 truncate max-w-[100px]" title={user?.programId}>
                           {user?.programId || "_"}
                         </code>
-                        <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#9900FF] text-[10px] transition-colors"></i>
+                        <i className="fa-regular fa-copy text-gray-300 group-hover/id:text-[#0f6845] text-[10px] transition-colors"></i>
                       </div>
                     </td>
                     <td className="px-6 py-4 font-medium text-gray-900">
@@ -617,7 +617,7 @@ const Programs = () => {
                         >
                           <button
                             onClick={() => navigate(`/program/${user?.programId}`)}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 hover:text-[#9900FF] flex items-center gap-2"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 hover:text-[#0f6845] flex items-center gap-2"
                           >
                             <i className="fa-regular fa-eye w-4"></i> View
                           </button>
@@ -713,7 +713,7 @@ const Programs = () => {
                   if (confirmAction) confirmAction(); // execute the action
                   setConfirmModalOpen(false);
                 }}
-                className="px-4 cursor-pointer py-2 bg-[#9900FF] text-white rounded-xl text-sm font-medium hover:bg-[#7f00d4] transition-colors"
+                className="px-4 cursor-pointer py-2 bg-[#0f6845] text-white rounded-xl text-sm font-medium hover:bg-[#7f00d4] transition-colors"
               >
                 Yes
               </button>

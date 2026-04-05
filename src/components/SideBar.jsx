@@ -12,6 +12,7 @@ const menuItems = [
   { name: "Transactions", icon: "/transactions.svg", key: "transactions", path: "/transactions" },
   { name: "Users", icon: "/user.svg", key: "users", path: "/users" },
   { name: "Blogs", icon: "/aboutUs.svg", key: "blogs", path: "/blogs" },
+  { name: "Support", icon: "/aboutUs.svg", key: "contacts", path: "/contact-us" },
 ];
 
 export default function SideBar({ collapsed, mobileOpen, onClose }) {
@@ -46,9 +47,9 @@ export default function SideBar({ collapsed, mobileOpen, onClose }) {
         <div className="flex flex-col h-full">
           <div className={`h-[88px] flex items-center ${collapsed ? "justify-center px-2" : "px-6"}`}>
             {!collapsed ? (
-              <h1 className="text-2xl font-bold text-[#9900FF]">GauKrishna</h1>
+              <h1 className="text-2xl font-bold text-[#0f6845]">GauKrishna</h1>
             ) : (
-              <h1 className="text-xl font-bold text-[#9900FF]">GK</h1>
+              <h1 className="text-xl font-bold text-[#0f6845]">GK</h1>
             )}
           </div>
           <nav className="flex-1 overflow-y-auto py-8 px-3 space-y-1 custom-scrollbar">
@@ -64,8 +65,8 @@ export default function SideBar({ collapsed, mobileOpen, onClose }) {
                   title={collapsed ? item.name : ""}
                   className={`w-full flex items-center gap-3.5 px-3.5 py-4 rounded-xl text-sm font-medium transition-all duration-200 group relative
                   ${isActive
-                      ? "bg-[#9900FF] text-white shadow-md shadow-purple-200"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-[#9900FF]"
+                      ? "bg-[#0f6845] text-white shadow-md shadow-purple-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-[#0f6845]"
                     }`}
                 >
                   <div className={`flex items-center justify-center w-6 h-6 transition-transform group-hover:scale-110 ${isActive ? "opacity-100" : "opacity-70 group-hover:opacity-100"}`}>

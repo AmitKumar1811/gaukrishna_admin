@@ -60,7 +60,7 @@ const PlatformCharges = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" />
+        <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" />
       </div>
     );
   }
@@ -89,7 +89,7 @@ const PlatformCharges = () => {
                   placeholder="Enter GST percentage"
                   value={gst}
                   onChange={(e) => setGst(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#9900FF] focus:border-[#9900FF] block p-3 pr-10 transition-colors outline-none hover:bg-white"
+                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#0f6845] focus:border-[#0f6845] block p-3 pr-10 transition-colors outline-none hover:bg-white"
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400 font-medium">
                   %
@@ -111,7 +111,7 @@ const PlatformCharges = () => {
                   placeholder="Enter platform fee amount"
                   value={platformFee}
                   onChange={(e) => setPlatformFee(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#9900FF] focus:border-[#9900FF] block p-3 pl-10 transition-colors outline-none hover:bg-white"
+                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#0f6845] focus:border-[#0f6845] block p-3 pl-10 transition-colors outline-none hover:bg-white"
                 />
               </div>
               <p className="text-xs text-gray-400 mt-1">Flat fee deducted per transaction.</p>
@@ -120,7 +120,7 @@ const PlatformCharges = () => {
             <div className="pt-4">
               <button
                 onClick={handleSave}
-                className="w-full flex cursor-pointer justify-center items-center gap-2 bg-[#9900FF] hover:bg-[#7f00d4] text-white px-6 py-3 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
+                className="w-full flex cursor-pointer justify-center items-center gap-2 bg-[#0f6845] hover:bg-[#7f00d4] text-white px-6 py-3 rounded-xl text-sm font-medium transition-all shadow-sm active:scale-95"
               >
                 <i className="fa-regular fa-floppy-disk"></i>
                 Save Changes

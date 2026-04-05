@@ -4,32 +4,32 @@ import { collection, query, where, getDocs, orderBy, doc, getDoc } from "firebas
 import { db } from "../../Firebase";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Pagination from "../../components/Pagiantion";
- 
+
 const StreamDetailsPage = () => {
     const { programId, streamId } = useParams();
     const navigate = useNavigate();
     const [stream, setStream] = useState(null);
     const [allCommands, setAllCommands] = useState([]);
     const [allScorecards, setAllScorecards] = useState([]);
- 
+
     // Displayed data (paginated)
     const [commands, setCommands] = useState([]);
     const [scorecards, setScorecards] = useState([]);
- 
+
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("commands");
     const [selectedItem, setSelectedItem] = useState(null);
     const [openDetailModal, setOpenDetailModal] = useState(false);
- 
+
     // Pagination
     const [itemsPerPage] = useState(20);
     const [currentPage, setCurrentPage] = useState(0);
- 
- 
+
+
     useEffect(() => {
         fetchData();
     }, [programId, streamId]);
- 
+
     const toMillis = (ts) => {
         if (ts === null || ts === undefined) return null;
         if (typeof ts === "number") return ts;
@@ -62,7 +62,7 @@ const StreamDetailsPage = () => {
         }
         return null;
     };
- 
+
     const formatDateTime = (ts) => {
         const ms = toMillis(ts);
         if (!ms) return "-";
@@ -75,14 +75,14 @@ const StreamDetailsPage = () => {
             hour12: true,
         });
     };
- 
+
     const formatTimestamp = (ts) => {
         const ms = toMillis(ts);
         if (ms) return new Date(ms).toLocaleString();
         if (typeof ts === "string") return ts;
         return ms;
     };
- 
+
     // Fetch ALL data once
     const fetchData = async () => {
         setLoading(true);
@@ -92,36 +92,36 @@ const StreamDetailsPage = () => {
             if (streamDoc.exists()) {
                 setStream({ id: streamDoc.id, ...streamDoc.data() });
             }
- 
+
             // 2. Fetch All Commands
             const commandsRef = collection(db, "programs", programId, "streams", streamId, "commands");
             // Fetch ALL documents (even those without timestamp)
             const commandsSnap = await getDocs(commandsRef);
             const cmdData = commandsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
- 
+
             // Client-side Sort (Descending)
             cmdData.sort((a, b) => {
                 const tA = toMillis(a.timestamp) || 0;
                 const tB = toMillis(b.timestamp) || 0;
                 return tB - tA;
             });
- 
+
             setAllCommands(cmdData);
- 
+
             // 3. Fetch All Scorecards
             const itemRef = collection(db, "programs", programId, "streams", streamId, "commentaryScoreCard");
             const itemQuery = query(itemRef, orderBy("csServerTimestamp", "desc"));
             const itemSnap = await getDocs(itemQuery);
             const scoreData = itemSnap.docs.map(d => ({ id: d.id, ...d.data() }));
             setAllScorecards(scoreData);
- 
+
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }
     };
- 
+
     // Handle Pagination & Tab Switching Logic
     useEffect(() => {
         if (activeTab === "commands") {
@@ -134,23 +134,23 @@ const StreamDetailsPage = () => {
             setScorecards(allScorecards.slice(start, end));
         }
     }, [activeTab, currentPage, allCommands, allScorecards, itemsPerPage]);
- 
+
     // Reset page to 0 when switching tabs
     useEffect(() => {
         setCurrentPage(0);
     }, [activeTab]);
- 
+
     // Calculate total pages based on ACTIVE tab
     const currentTotalItems = activeTab === "commands" ? allCommands.length : allScorecards.length;
     const totalPages = Math.ceil(currentTotalItems / itemsPerPage);
     if (loading) return <div className="p-10 text-center">Loading...</div>;
 
     const openDetails = (item, type) => {
-    setSelectedItem(item);
-    setOpenDetailModal(true);
-   };
- 
- 
+        setSelectedItem(item);
+        setOpenDetailModal(true);
+    };
+
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex items-center gap-4">
@@ -158,19 +158,19 @@ const StreamDetailsPage = () => {
                     <ChevronLeftIcon className="w-6 h-6 text-gray-600" />
                 </button>
                 <div>
-                    <h1 className="text-2xl font-bold text-[#9900FF]">{stream?.streamName || "Stream Details"}</h1>
+                    <h1 className="text-2xl font-bold text-[#0f6845]">{stream?.streamName || "Stream Details"}</h1>
                 </div>
             </div>
             <div className="flex gap-4 border-b border-gray-200">
                 <button
                     onClick={() => setActiveTab("commands")}
-                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "commands" ? "border-b-2 border-[#9900FF] text-[#9900FF]" : "text-gray-500"}`}
+                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "commands" ? "border-b-2 border-[#0f6845] text-[#0f6845]" : "text-gray-500"}`}
                 >
                     Commands ({allCommands.length})
                 </button>
                 <button
                     onClick={() => setActiveTab("scorecards")}
-                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "scorecards" ? "border-b-2 border-[#9900FF] text-[#9900FF]" : "text-gray-500"}`}
+                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "scorecards" ? "border-b-2 border-[#0f6845] text-[#0f6845]" : "text-gray-500"}`}
                 >
                     Scorecards ({allScorecards.length})
                 </button>
@@ -216,7 +216,7 @@ const StreamDetailsPage = () => {
                         </table>
                     </div>
                 )}
- 
+
                 {activeTab === "scorecards" && (
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left text-gray-600">
@@ -254,7 +254,7 @@ const StreamDetailsPage = () => {
                                             </span>
                                         </td>
                                         <td className="p-4">
-                                            <span className="text-[#9900FF] font-medium text-sm hover:underline">View Details</span>
+                                            <span className="text-[#0f6845] font-medium text-sm hover:underline">View Details</span>
                                         </td>
                                     </tr>
                                 ))}
@@ -263,7 +263,7 @@ const StreamDetailsPage = () => {
                                 )}
                             </tbody>
                         </table>
- 
+
                     </div>
                 )}
             </div>
@@ -280,19 +280,19 @@ const StreamDetailsPage = () => {
         </div>
     );
 };
- 
- 
+
+
 const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
     if (!open) return null;
     const { matchDetails, commentary, scoreCard, csServerTimestamp } = data;
- 
+
     const validScorecards = scoreCard?.filter(inning =>
         inning &&
         (inning.batTeamName || inning.score !== undefined)
     ) || [];
 
 
- 
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto ring-1 ring-gray-900/5">
@@ -309,20 +309,20 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                         </svg>
                     </button>
                 </div>
- 
+
                 <div className="p-6 space-y-6">
                     <div className="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-2xl shadow-lg text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" /></svg>
                         </div>
- 
+
                         <div className="relative z-10">
                             <div className="flex justify-between items-start mb-3">
                                 <span className="bg-white/20 backdrop-blur-md text-white/90 text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider border border-white/10">
                                     {matchDetails?.seriesName || "Series Info"}
                                 </span>
                             </div>
- 
+
                             <h2 className="text-xl font-bold leading-snug mb-1">{matchDetails?.matchDescription}</h2>
                             <p className="text-indigo-100 text-sm opacity-90">{matchDetails?.status}</p>
                         </div>
@@ -334,11 +334,11 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                             </div>
                             <p className="font-bold text-gray-800 text-sm text-center leading-tight">{matchDetails?.team1?.name}</p>
                         </div>
- 
+
                         <div className="px-4 text-center">
                             <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">VS</span>
                         </div>
- 
+
                         <div className="flex flex-col items-center flex-1">
                             <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-2 text-lg font-black text-gray-700 border border-gray-100">
                                 {matchDetails?.team2?.shortName || "T2"}
@@ -359,7 +359,7 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                             <div className="text-[10px] text-gray-400">Raw CS Server Time: {toMillis(csServerTimestamp) ?? String(csServerTimestamp)}</div>
                         </div>
                     )}
- 
+
                     <div className="space-y-2">
                         <div className="flex items-center justify-between bg-gray-50/80 rounded-lg p-3 border border-gray-100">
                             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Match Date</span>
@@ -369,7 +369,7 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                                     : "N/A"}
                             </span>
                         </div>
- 
+
                         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
                             <table className="w-full text-center text-xs">
                                 <thead className="bg-gray-50 text-gray-500 font-semibold border-b border-gray-200">
@@ -399,9 +399,9 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                             </table>
                         </div>
                     </div>
- 
+
                     {validScorecards.map((inning, idx) => (
- 
+
                         <div>
                             <h4 className="flex items-center gap-2 text-xs font-bold text-gray-900 uppercase mb-3 px-1 mt-4 border-t pt-4 border-gray-100">
                                 Scorecard Summary
@@ -418,7 +418,7 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50 text-gray-700">
- 
+
                                         <tr key={idx} className="hover:bg-indigo-50/30 transition-colors">
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-col gap-1.5 items-start">
@@ -446,7 +446,7 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                                                 {inning.ballNbr}
                                             </td>
                                         </tr>
- 
+
                                         {validScorecards.length === 0 && (
                                             <tr>
                                                 <td colSpan="5" className="p-4 text-center text-gray-500 py-10">
@@ -460,13 +460,12 @@ const DetailModal = ({ open, onClose, data, formatTimestamp, toMillis }) => {
                         </div>
                     ))}
                 </div>
- 
+
             </div>
- 
+
         </div>
     )
 }
- 
+
 export default StreamDetailsPage;
- 
- 
+

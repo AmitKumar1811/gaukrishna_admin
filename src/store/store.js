@@ -9,6 +9,8 @@ import blogReducer from "./blogSlice";
 import orderReducer from "./orderSlice";
 import transactionReducer from "./transactionSlice";
 import userReducer from "./userSlice";
+import contactReducer from "./contactSlice";
+
 
 const persistConfig = {
   key: "gaukrishna-root",
@@ -24,7 +26,9 @@ const rootReducer = combineReducers({
   orders: orderReducer,
   transactions: transactionReducer,
   users: userReducer,
+  contacts: contactReducer,
 });
+
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

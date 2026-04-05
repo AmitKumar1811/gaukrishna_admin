@@ -13,7 +13,7 @@ const ChangePassword = () => {
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required("Old password is required"),
     newPassword: Yup.string()
@@ -23,61 +23,61 @@ const dispatch = useDispatch();
       .oneOf([Yup.ref("newPassword"), null], "Passwords do not match")
       .required("Confirm password is required"),
   });
-const navigate=useNavigate();
+  const navigate = useNavigate();
 
 
 
 
-const changePassword = async ({ oldPassword, newPassword }) => {
+  const changePassword = async ({ oldPassword, newPassword }) => {
 
-  const user = auth.currentUser;
+    const user = auth.currentUser;
 
-  if (!user || !user.email) {
-    throw new Error("User not authenticated");
-  }
-
-  const credential = EmailAuthProvider.credential(
-    user.email,
-    oldPassword
-  );
-
-  await reauthenticateWithCredential(user, credential);
-
-  // Update password
-  await updatePassword(user, newPassword);
-
-  return true;
-};
-
-
-
-
-
-
-const handleSubmit = async (values, { resetForm }) => {
-  try {
-    await changePassword({
-      oldPassword: values.oldPassword,
-      newPassword: values.newPassword,
-    });
-
-    toast.success("Password changed successfully");
-    resetForm();
-    dispatch(logout());
-    navigate("/login");
-  } catch (error) {
-    console.error(error);
-
-    // Firebase error handling
-    if (error.code === "auth/wrong-password") {
-      toast.error("Old password is incorrect");
-    } else if (error.code === "auth/requires-recent-login") {
-      toast.error("Please login again and retry");
-    } else {
-      toast.error(error.message || "Failed to change password");
+    if (!user || !user.email) {
+      throw new Error("User not authenticated");
     }
-  }
-};
+
+    const credential = EmailAuthProvider.credential(
+      user.email,
+      oldPassword
+    );
+
+    await reauthenticateWithCredential(user, credential);
+
+    // Update password
+    await updatePassword(user, newPassword);
+
+    return true;
+  };
+
+
+
+
+
+
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      await changePassword({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      });
+
+      toast.success("Password changed successfully");
+      resetForm();
+      dispatch(logout());
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+
+      // Firebase error handling
+      if (error.code === "auth/wrong-password") {
+        toast.error("Old password is incorrect");
+      } else if (error.code === "auth/requires-recent-login") {
+        toast.error("Please login again and retry");
+      } else {
+        toast.error(error.message || "Failed to change password");
+      }
+    }
+  };
 
 
   return (
@@ -89,7 +89,7 @@ const handleSubmit = async (values, { resetForm }) => {
       >
         {() => (
           <Form className="flex flex-col gap-5">
-            
+
             {/* OLD PASSWORD */}
             <div className="flex flex-col gap-3">
               <label className="text-[14px] font-semibold">Old Password</label>
@@ -153,7 +153,7 @@ const handleSubmit = async (values, { resetForm }) => {
             {/* SUBMIT BUTTON */}
             <button
               type="submit"
-              className="w-full cursor-pointer bg-[#9900FF] text-[#FFFFFF] text-[14px] font-medium py-3 rounded-[100px]"
+              className="w-full cursor-pointer bg-[#0f6845] text-[#FFFFFF] text-[14px] font-medium py-3 rounded-[100px]"
             >
               Update Password
             </button>

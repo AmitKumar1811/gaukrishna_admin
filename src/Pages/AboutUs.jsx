@@ -16,7 +16,7 @@ import { ThreeDots } from "react-loader-spinner";
 
 const ModernEditor = ({ value, onChange }) => {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#9900FF] transition-colors duration-300">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#0f6845] transition-colors duration-300">
       <Editor
         apiKey='67wfwn36yoqbdfa5b9z2h0htonpl9fe1leq140x79yraniaz'
         value={value}
@@ -125,7 +125,7 @@ const DynamicContent = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-[#f8f9fa]">
-        <ThreeDots height="50" width="50" radius="9" visible={true} color="#9900FF" />
+        <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" />
       </div>
     );
   }
@@ -151,7 +151,7 @@ const DynamicContent = () => {
               key={key}
               onClick={() => setActiveTab(key)}
               className={`px-6 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-all
-                        ${activeTab === key ? "bg-[#9900FF] text-white shadow-md" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}
+                        ${activeTab === key ? "bg-[#0f6845] text-white shadow-md" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}
             >
               {SECTIONS[key].label}
             </button>
@@ -259,7 +259,7 @@ const SectionPreview = ({ data, type, onEdit }) => {
         </p>
         <button
           onClick={onEdit}
-          className="px-6 py-2.5 bg-[#9900FF] text-white rounded-xl text-sm font-semibold hover:bg-[#7f00d4] transition-all shadow-md active:scale-95 flex items-center gap-2"
+          className="px-6 py-2.5 bg-[#0f6845] text-white rounded-xl text-sm font-semibold hover:bg-[#7f00d4] transition-all shadow-md active:scale-95 flex items-center gap-2"
         >
           <i className="fa-solid fa-plus"></i> Add Content
         </button>
@@ -271,12 +271,12 @@ const SectionPreview = ({ data, type, onEdit }) => {
     <div className="animate-fade-in">
       <div className="flex justify-between items-start mb-8 border-b border-gray-100 pb-6">
         <div>
-          <span className="text-xs font-bold text-[#9900FF] uppercase tracking-wider mb-1 block">Preview</span>
+          <span className="text-xs font-bold text-[#0f6845] uppercase tracking-wider mb-1 block">Preview</span>
           <h3 className="text-2xl font-bold text-gray-900">{type === 'about_us' ? data.title : SECTIONS[type].label}</h3>
         </div>
         <button
           onClick={onEdit}
-          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-purple-50 text-[#9900FF] font-medium border border-[#9900FF]/20 hover:bg-[#9900FF] hover:text-white transition-all shadow-sm active:scale-95 text-sm"
+          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-purple-50 text-[#0f6845] font-medium border border-[#0f6845]/20 hover:bg-[#0f6845] hover:text-white transition-all shadow-sm active:scale-95 text-sm"
         >
           <i className="fa-regular fa-pen-to-square"></i> Edit Content
         </button>
@@ -291,7 +291,7 @@ const SectionPreview = ({ data, type, onEdit }) => {
             </div>
           )}
           <div
-            className="prose prose-lg max-w-none text-gray-600 prose-headings:text-gray-900 prose-a:text-[#9900FF]"
+            className="prose prose-lg max-w-none text-gray-600 prose-headings:text-gray-900 prose-a:text-[#0f6845]"
             dangerouslySetInnerHTML={{ __html: data.description }}
           />
         </div>
@@ -374,7 +374,7 @@ const SectionForm = ({ initialValues, validationSchema, onSubmit, onCancel, fiel
                   name={field.name}
                   value={values[field.name]}
                   onChange={(e) => setFieldValue(field.name, e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#9900FF] focus:border-[#9900FF] block p-3 outline-none transition-colors"
+                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#0f6845] focus:border-[#0f6845] block p-3 outline-none transition-colors"
                   placeholder={`Enter ${field.label}`}
                 />
               )}
@@ -444,7 +444,7 @@ const SectionForm = ({ initialValues, validationSchema, onSubmit, onCancel, fiel
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-8 py-3 bg-[#9900FF] hover:bg-[#7f00d4] text-white text-sm font-semibold rounded-xl shadow-lg shadow-purple-200 transition-all hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 flex-1"
+              className="px-8 py-3 bg-[#0f6845] hover:bg-[#7f00d4] text-white text-sm font-semibold rounded-xl shadow-lg shadow-purple-200 transition-all hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 flex-1"
             >
               {isSubmitting ? (
                 <ThreeDots height="20" width="20" color="#ffffff" visible={true} />

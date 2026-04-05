@@ -132,7 +132,7 @@ const PackageDetail = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
-                <ThreeDots height="50" width="50" color="#9900FF" visible={true} />
+                <ThreeDots height="50" width="50" color="#0f6845" visible={true} />
             </div>
         );
     }
@@ -169,7 +169,7 @@ const PackageDetail = () => {
                             <>
                                 <button
                                     onClick={() => { setActionType('completed'); setShowStatusModal(true); }}
-                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-50 text-[#9900FF] font-medium border border-[#9900FF]/20 hover:bg-[#9900FF] hover:text-white transition-all shadow-sm active:scale-95"
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-50 text-[#0f6845] font-medium border border-[#0f6845]/20 hover:bg-[#0f6845] hover:text-white transition-all shadow-sm active:scale-95"
                                 >
                                     <i className="fa-regular fa-circle-check"></i> Mark As Completed
                                 </button>
@@ -272,7 +272,7 @@ const PackageDetail = () => {
                                             <td className="px-6 py-4 text-gray-600 font-mono text-xs">{formatTime(prog.startTime)}</td>
                                             <td className="px-6 py-4 text-gray-600">{prog.programCategory}</td>
                                             <td className="px-6 py-4 text-right">
-                                                <button onClick={() => navigate(`/program/${prog.id}`)} className="text-[#9900FF] hover:underline text-sm font-medium">View</button>
+                                                <button onClick={() => navigate(`/program/${prog.id}`)} className="text-[#0f6845] hover:underline text-sm font-medium">View</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -329,7 +329,7 @@ const PackageDetail = () => {
                                     handleStatusChange(actionType === "cancelled" ? "cancelled" : "completed");
                                     setShowStatusModal(false);
                                 }}
-                                className={`px-5 py-2 rounded-xl text-sm font-medium text-white shadow-sm ${actionType === "cancelled" ? "bg-red-600 hover:bg-red-700" : "bg-[#9900FF] hover:bg-[#7f00d4]"}`}
+                                className={`px-5 py-2 rounded-xl text-sm font-medium text-white shadow-sm ${actionType === "cancelled" ? "bg-red-600 hover:bg-red-700" : "bg-[#0f6845] hover:bg-[#7f00d4]"}`}
                             >
                                 Yes, Mark {actionType}
                             </button>
@@ -362,7 +362,7 @@ const BadgeList = ({ label, items }) => (
         {Array.isArray(items) && items.length > 0 ? (
             <div className="flex flex-wrap gap-2">
                 {items.map((item, index) => (
-                    <span key={index} className="px-3 py-1 text-xs rounded-full bg-[#9900FF]/10 text-[#9900FF] font-medium border border-[#9900FF]/20">
+                    <span key={index} className="px-3 py-1 text-xs rounded-full bg-[#0f6845]/10 text-[#0f6845] font-medium border border-[#0f6845]/20">
                         {item}
                     </span>
                 ))}
