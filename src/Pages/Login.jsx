@@ -69,7 +69,7 @@ const Login = () => {
 
   return (
     <div
-      className="flex flex-col justify-between h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black"
+      className="flex flex-col bg-[url('/wallpaper.jpg')] bg-cover bg-center bg-no-repeat   justify-between h-screen"
     >
       <div className="relative z-10 flex flex-col items-center justify-center flex-1 p-5 md:p-15 gap-5 md:gap-8">
         <div className="flex gap-2 mb-4">
