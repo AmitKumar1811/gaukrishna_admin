@@ -11,6 +11,7 @@ import {
     ArrowLeftIcon,
     CheckCircleIcon,
     ExclamationCircleIcon as ExclamationIcon,
+    TrashIcon,
 } from "@heroicons/react/24/outline";
 import { uploadFileToFirebase } from "../utils/imageUpload";
 import ReactQuill from "react-quill-new";
@@ -41,6 +42,8 @@ const AddEditProduct = () => {
         description: "",
         short_description: "",
         weight: "",
+        benefits: "",
+        ingredients: "",
         is_best_seller: false,
         is_new_launch: false,
         isActive: true,
@@ -50,10 +53,9 @@ const AddEditProduct = () => {
             description: "",
             keywords: "",
         },
-        image: null,
     });
 
-    const [imagePreview, setImagePreview] = useState("");
+    const [images, setImages] = useState([]); // Array of { id, url, file }
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingInit, setIsLoadingInit] = useState(true);
     const [formErrors, setFormErrors] = useState({});
@@ -107,6 +109,8 @@ const AddEditProduct = () => {
                             description: product.description || "",
                             short_description: product.short_description || "",
                             weight: product.weight || "",
+                            benefits: product.benefits || "",
+                            ingredients: product.ingredients || "",
                             is_best_seller: product.is_best_seller || false,
                             is_new_launch: product.is_new_launch || false,
                             isActive: product.isActive !== undefined ? product.isActive : true,
@@ -118,9 +122,13 @@ const AddEditProduct = () => {
                                 description: product.seo?.description || "",
                                 keywords: product.seo?.keywords || "",
                             },
-                            image: null,
                         });
-                        setImagePreview(product.images?.[0] || product.image || "");
+                        const initialImages = product.images || (product.image ? [product.image] : []);
+                        setImages(initialImages.map((url, index) => ({
+                            id: `existing-${index}-${Date.now()}`,
+                            url,
+                            file: null
+                        })));
                     } else {
                         toast.error("Product not found");
                         navigate("/products");
@@ -185,6 +193,14 @@ const AddEditProduct = () => {
         }
     };
 
+    const handleBenefitsChange = (content) => {
+        setFormData(prev => ({ ...prev, benefits: content }));
+    };
+
+    const handleIngredientsChange = (content) => {
+        setFormData(prev => ({ ...prev, ingredients: content }));
+    };
+
     const handleAttributeChange = (index, field, value) => {
 
         const newAttributes = [...formData.attributes];
@@ -203,21 +219,49 @@ const AddEditProduct = () => {
     };
 
     const handleImageChange = (e) => {
-        const file = e.target.files?.[0];
+        const files = Array.from(e.target.files || []);
+        const validFiles = [];
 
-        if (file) {
+        for (const file of files) {
             if (!file.type.startsWith("image/")) {
-                toast.error("Please select a valid image file");
-                return;
+                toast.error(`"${file.name}" is not a valid image file`);
+                continue;
             }
             if (file.size > 5 * 1024 * 1024) {
-                toast.error("Image size should be less than 5MB");
-                return;
+                toast.error(`"${file.name}" exceeds 5MB size limit`);
+                continue;
             }
-
-            setFormData((prev) => ({ ...prev, image: file }));
-            setImagePreview(URL.createObjectURL(file));
+            validFiles.push({
+                id: Math.random().toString(36).substring(2, 9) + Date.now(),
+                url: URL.createObjectURL(file),
+                file
+            });
         }
+
+        if (validFiles.length > 0) {
+            setImages((prev) => [...prev, ...validFiles]);
+            if (formErrors.images) {
+                setFormErrors((prev) => {
+                    const newErrors = { ...prev };
+                    delete newErrors.images;
+                    return newErrors;
+                });
+            }
+        }
+        
+        if (e.target) {
+            e.target.value = "";
+        }
+    };
+
+    const removeImage = (id) => {
+        setImages((prev) => {
+            const imageToRemove = prev.find((img) => img.id === id);
+            if (imageToRemove && imageToRemove.file) {
+                URL.revokeObjectURL(imageToRemove.url);
+            }
+            return prev.filter((img) => img.id !== id);
+        });
     };
 
     const validateForm = () => {
@@ -250,6 +294,9 @@ const AddEditProduct = () => {
         if (!formData.description.replace(/<(.|\n)*?>/g, '').trim()) {
             errors.description = "Description is required";
         }
+        if (images.length === 0) {
+            errors.images = "At least one product image is required";
+        }
 
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
@@ -266,14 +313,17 @@ const AddEditProduct = () => {
         setIsSubmitting(true);
 
         try {
-            let imageUrl = imagePreview; // Default to existing image url
+            // Upload all new images to Firebase
+            const uploadPromises = images.map(async (img) => {
+                if (img.file) {
+                    const path = `products/${Date.now()}_${img.file.name}`;
+                    const uploadedUrl = await uploadFileToFirebase(img.file, path);
+                    return uploadedUrl;
+                }
+                return img.url; // Keep existing url
+            });
 
-            if (formData.image) {
-                // Upload to Firebase
-                const file = formData.image;
-                const path = `products/${Date.now()}_${file.name}`;
-                imageUrl = await uploadFileToFirebase(file, path);
-            }
+            const imageUrls = await Promise.all(uploadPromises);
 
             const attributesObj = {};
             formData.attributes.forEach(attr => {
@@ -285,20 +335,23 @@ const AddEditProduct = () => {
             const payload = {
                 name: formData.name.trim(),
                 slug: formData.slug.trim(),
-                sku: formData.sku.trim(),
+                sku: (formData.sku || "").trim(),
+                categoryId: formData.category,
                 category_id: formData.category,
                 mrp: Number(formData.mrp),
                 price: Number(formData.price),
                 stock: Number(formData.stock),
                 description: formData.description.trim(),
-                short_description: formData.short_description.trim(),
-                weight: formData.weight.trim(),
+                short_description: (formData.short_description || "").trim(),
+                weight: (formData.weight || "").trim(),
+                benefits: (formData.benefits || "").trim(),
+                ingredients: (formData.ingredients || "").trim(),
                 is_best_seller: formData.is_best_seller,
                 is_new_launch: formData.is_new_launch,
                 isActive: formData.isActive,
                 attributes: attributesObj,
                 seo: formData.seo,
-                images: imageUrl ? [imageUrl] : [],
+                images: imageUrls,
                 variants: [],
             };
 
@@ -467,6 +520,48 @@ const AddEditProduct = () => {
                                         </FormField>
                                     </div>
 
+                                    {/* Benefits */}
+                                    <FormField label="Benefits">
+                                        <div className="bg-white rounded-lg">
+                                            <ReactQuill
+                                                theme="snow"
+                                                value={formData.benefits}
+                                                onChange={handleBenefitsChange}
+                                                placeholder="Write product benefits..."
+                                                className="quill-editor border-gray-200"
+                                                modules={{
+                                                    toolbar: [
+                                                        ['bold', 'italic', 'underline', 'strike'],
+                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                        ['clean']
+                                                    ],
+                                                }}
+                                                style={{ height: '150px', marginBottom: '45px' }}
+                                            />
+                                        </div>
+                                    </FormField>
+
+                                    {/* Ingredients */}
+                                    <FormField label="Ingredients">
+                                        <div className="bg-white rounded-lg">
+                                            <ReactQuill
+                                                theme="snow"
+                                                value={formData.ingredients}
+                                                onChange={handleIngredientsChange}
+                                                placeholder="Write product ingredients..."
+                                                className="quill-editor border-gray-200"
+                                                modules={{
+                                                    toolbar: [
+                                                        ['bold', 'italic', 'underline', 'strike'],
+                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                        ['clean']
+                                                    ],
+                                                }}
+                                                style={{ height: '150px', marginBottom: '45px' }}
+                                            />
+                                        </div>
+                                    </FormField>
+
                                     {/* Pricing & Stock */}
                                     <div className="grid grid-cols-3 gap-4">
                                         <FormField
@@ -596,43 +691,38 @@ const AddEditProduct = () => {
                                 {/* Right Column - Image Upload */}
                                 <div className="lg:col-span-1">
                                     <FormField
-                                        label="Product Image"
-                                        error={formErrors.image}
+                                        label="Product Images"
+                                        error={formErrors.images}
                                         required
                                     >
-                                        <div
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className="relative group cursor-pointer h-64 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50"
-                                        >
-                                            {imagePreview ? (
-                                                <>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {images.map((img, idx) => (
+                                                <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
                                                     <img
-                                                        src={imagePreview}
-                                                        alt="Preview"
+                                                        src={img.url}
+                                                        alt={`Preview ${idx + 1}`}
                                                         className="w-full h-full object-cover"
                                                     />
-                                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                                        <div className="text-center">
-                                                            <PhotoIcon className="w-8 h-8 text-white mx-auto mb-2" />
-                                                            <p className="text-white text-sm font-medium">
-                                                                Change Image
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <div className="flex flex-col items-center justify-center h-full">
-                                                    <div className="mb-3 p-3 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
-                                                        <PhotoIcon className="w-6 h-6 text-purple-600" />
-                                                    </div>
-                                                    <p className="text-sm font-medium text-gray-700">
-                                                        Click to upload
-                                                    </p>
-                                                    <p className="text-xs text-gray-500 mt-1">
-                                                        PNG, JPG up to 5MB
-                                                    </p>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(img.id)}
+                                                        className="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-700 transition-all duration-200 shadow-md cursor-pointer"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                    </button>
                                                 </div>
-                                            )}
+                                            ))}
+                                            
+                                            <div
+                                                onClick={() => fileInputRef.current?.click()}
+                                                className="relative group cursor-pointer aspect-square rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-gray-300 hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50"
+                                            >
+                                                <div className="mb-2 p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
+                                                    <PhotoIcon className="w-5 h-5 text-purple-600" />
+                                                </div>
+                                                <span className="text-xs font-semibold text-gray-700">Add Image</span>
+                                                <span className="text-[10px] text-gray-500 mt-0.5">PNG, JPG up to 5MB</span>
+                                            </div>
                                         </div>
 
                                         <input
@@ -641,6 +731,7 @@ const AddEditProduct = () => {
                                             onChange={handleImageChange}
                                             className="hidden"
                                             accept="image/*"
+                                            multiple
                                         />
                                     </FormField>
                                 </div>
