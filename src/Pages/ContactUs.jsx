@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchContacts, updateContactStatus, solveInquiry, deleteContact } from "../store/contactSlice";
-import { EnvelopeIcon, CheckCircleIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, CheckCircleIcon, XMarkIcon, TrashIcon, EllipsisVerticalIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 const ContactUs = () => {
     const navigate = useNavigate();
@@ -13,6 +13,9 @@ const ContactUs = () => {
     const [selectedContact, setSelectedContact] = useState(null);
     const [statusFilter, setStatusFilter] = useState("all");
     const [dateFilter, setDateFilter] = useState("");
+    
+    // Dropdown state
+    const [activeDropdown, setActiveDropdown] = useState(null);
 
     useEffect(() => {
         dispatch(fetchContacts());
@@ -64,11 +67,11 @@ const ContactUs = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-6 bg-slate-50/50 min-h-screen relative">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Support Inquiries</h1>
-                    <p className="text-gray-500 text-sm">Manage customer issues and help requests</p>
+                    <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Support Inquiries</h1>
+                    <p className="text-slate-500 text-sm mt-0.5">Manage customer issues and help requests</p>
                 </div>
                 <div className="flex gap-3">
                     <select
@@ -90,66 +93,97 @@ const ContactUs = () => {
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50 text-gray-500 text-xs font-bold uppercase tracking-wider">
+            <div className="bg-white rounded-2xl shadow-xl shadow-slate-100/40 border border-slate-100 overflow-visible">
+                <table className="w-full text-left border-collapse">
+                    <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase text-[11px] font-bold tracking-wider">
                         <tr>
-                            <th className="px-6 py-4">Customer</th>
+                            <th className="px-6 py-4 rounded-tl-2xl">Customer</th>
                             <th className="px-6 py-4">Subject</th>
                             <th className="px-6 py-4">Date</th>
                             <th className="px-6 py-4">Status</th>
-                            <th className="px-6 py-4 text-right">Actions</th>
+                            <th className="px-6 py-4 text-right rounded-tr-2xl">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className="divide-y divide-slate-100">
                         {loading ? (
                             <tr>
-                                <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                <td colSpan="5" className="px-6 py-12 text-center text-slate-400">
                                     <div className="flex flex-col items-center">
-                                        <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-2"></div>
-                                        <span>Loading inquiries...</span>
+                                        <div className="w-8 h-8 border-4 border-slate-200 border-t-[#0f6845] rounded-full animate-spin mb-2"></div>
+                                        <span className="text-sm font-medium">Loading inquiries...</span>
                                     </div>
                                 </td>
                             </tr>
                         ) : filteredContacts.length === 0 ? (
                             <tr>
-                                <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                <td colSpan="5" className="px-6 py-12 text-center text-slate-400">
                                     <div className="flex flex-col items-center">
-                                        <EnvelopeIcon className="w-12 h-12 text-gray-200 mb-3" />
-                                        <p className="font-medium text-gray-400">No inquiries found</p>
+                                        <EnvelopeIcon className="w-12 h-12 text-slate-300 mb-3" />
+                                        <p className="font-semibold text-slate-600 text-base">No inquiries found</p>
                                     </div>
                                 </td>
                             </tr>
                         ) : (
                             filteredContacts.map((contact) => (
-                                <tr key={contact._id} className="hover:bg-gray-50 transition-colors">
+                                <tr key={contact._id} className="hover:bg-slate-50/50 transition-colors duration-150">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm border border-slate-200">
+                                            <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm border border-indigo-100 shadow-sm flex-shrink-0">
                                                 {contact.name[0].toUpperCase()}
                                             </div>
-                                            <div>
-                                                <p className="text-sm font-semibold text-gray-900">{contact.name}</p>
-                                                <p className="text-xs text-gray-500">{contact.email}</p>
+                                            <div className="flex flex-col">
+                                                <p className="text-[15px] font-semibold text-slate-800">{contact.name}</p>
+                                                <p className="text-xs text-slate-500 font-medium mt-0.5">{contact.email}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <p className="text-sm text-gray-800 font-medium truncate max-w-xs">{contact.subject}</p>
+                                        <p className="text-[14px] text-slate-700 font-semibold truncate max-w-xs">{contact.subject}</p>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                    <td className="px-6 py-4 text-sm text-slate-500 font-medium">
                                         {new Date(contact.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4">
                                         {getStatusBadge(contact.status)}
                                     </td>
-                                    <td className="px-6 py-4 text-right">
+                                    <td className="px-6 py-4 text-right whitespace-nowrap relative">
                                         <button
-                                            onClick={() => handleOpenInquiry(contact)}
-                                            className="text-purple-600 hover:text-purple-800 text-sm font-bold transition-all px-3 py-1.5 rounded-lg hover:bg-purple-50"
+                                            onClick={() => setActiveDropdown(activeDropdown === contact._id ? null : contact._id)}
+                                            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all focus:outline-none"
                                         >
-                                            View Details
+                                            <EllipsisVerticalIcon className="w-5 h-5" />
                                         </button>
+
+                                        {activeDropdown === contact._id && (
+                                            <>
+                                                <div 
+                                                    className="fixed inset-0 z-10"
+                                                    onClick={() => setActiveDropdown(null)}
+                                                ></div>
+                                                <div className="absolute right-8 top-10 w-40 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-slate-100/50 py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150">
+                                                    <button
+                                                        onClick={() => {
+                                                            handleOpenInquiry(contact);
+                                                            setActiveDropdown(null);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50/80 hover:text-[#0f6845] transition-colors flex items-center gap-2 font-medium"
+                                                    >
+                                                        <EyeIcon className="w-4 h-4" />
+                                                        View Details
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            handleDeleteInquiry(contact._id);
+                                                            setActiveDropdown(null);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/80 transition-colors flex items-center gap-2 font-medium"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             ))

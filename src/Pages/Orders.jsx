@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Pagination from "../components/Pagiantion";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
+import { EllipsisVerticalIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 const Orders = () => {
     const dispatch = useDispatch();
@@ -15,6 +16,9 @@ const Orders = () => {
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const limit = 10;
+    
+    // Dropdown state
+    const [activeDropdown, setActiveDropdown] = useState(null);
 
     const fetchOrders = async () => {
         dispatch(setLoading(true));
@@ -50,67 +54,88 @@ const Orders = () => {
     const totalPages = Math.ceil(totalItems / limit);
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-6 bg-slate-50/50 min-h-screen relative">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Orders</h1>
-                    <p className="text-gray-500 text-sm">Monitor and manage customer orders</p>
+                    <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Orders</h1>
+                    <p className="text-slate-500 text-sm mt-0.5">Monitor and manage customer orders</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50/50 border-b border-gray-100 text-gray-500 uppercase text-xs font-semibold">
+            <div className="bg-white rounded-2xl shadow-xl shadow-slate-100/40 border border-slate-100 overflow-visible">
+                <table className="w-full text-left border-collapse">
+                    <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase text-[11px] font-bold tracking-wider">
                         <tr>
-                            <th className="px-6 py-4">Order ID</th>
+                            <th className="px-6 py-4 rounded-tl-2xl">Order ID</th>
                             <th className="px-6 py-4">Customer</th>
                             <th className="px-6 py-4">Total</th>
                             <th className="px-6 py-4">Status</th>
                             <th className="px-6 py-4">Date</th>
-                            <th className="px-6 py-4 text-right">Actions</th>
+                            <th className="px-6 py-4 text-right rounded-tr-2xl">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className="divide-y divide-slate-100">
                         {loading ? (
                             <tr>
                                 <td colSpan="6" className="py-20 text-center">
                                     <div className="flex flex-col items-center">
                                         <ThreeDots height="40" width="40" radius="9" color="#0f6845" ariaLabel="three-dots-loading" visible={true} />
-                                        <p className="text-sm text-gray-500 mt-2">Loading orders...</p>
+                                        <p className="text-sm text-slate-500 mt-2 font-medium">Loading orders...</p>
                                     </div>
                                 </td>
                             </tr>
                         ) : orders.length === 0 ? (
                             <tr>
-                                <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
-                                    <p className="font-medium">No orders found.</p>
+                                <td colSpan="6" className="px-6 py-12 text-center text-slate-500">
+                                    <p className="font-semibold">No orders found.</p>
                                 </td>
                             </tr>
                         ) : (
                             orders.map((order) => (
-                                <tr key={order._id || order.id} className="hover:bg-gray-50/50 transition-colors">
-                                    <td className="px-6 py-4 font-mono text-xs text-gray-500">
+                                <tr key={order._id || order.id} className="hover:bg-slate-50/50 transition-colors duration-150">
+                                    <td className="px-6 py-4 font-mono text-xs text-slate-500 tracking-wider">
                                         {(order._id || order.id).slice(-8).toUpperCase()}
                                     </td>
-                                    <td className="px-6 py-4 font-medium text-gray-900">
+                                    <td className="px-6 py-4 font-semibold text-slate-800 text-[15px]">
                                         {order.user?.name || order.addressSnapshot?.phone || "Order Customer"}
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900">₹{order.totalAmount}</td>
+                                    <td className="px-6 py-4 font-bold text-slate-900 text-base">₹{order.totalAmount}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(order.orderStatus || order.status)}`}>
+                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(order.orderStatus || order.status)}`}>
                                             {order.orderStatus || order.status || "Unknown"}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                    <td className="px-6 py-4 text-slate-500 text-sm font-medium">
                                         {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
-                                    <td className="px-6 py-4 text-right">
+                                    <td className="px-6 py-4 text-right whitespace-nowrap relative">
                                         <button
-                                            onClick={() => navigate(`/orders/${order._id || order.id}`)}
-                                            className="text-[#0f6845] hover:text-purple-700 font-semibold text-sm transition-colors cursor-pointer"
+                                            onClick={() => setActiveDropdown(activeDropdown === (order._id || order.id) ? null : (order._id || order.id))}
+                                            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all focus:outline-none"
                                         >
-                                            View Details
+                                            <EllipsisVerticalIcon className="w-5 h-5" />
                                         </button>
+                                        
+                                        {activeDropdown === (order._id || order.id) && (
+                                            <>
+                                                <div 
+                                                    className="fixed inset-0 z-10"
+                                                    onClick={() => setActiveDropdown(null)}
+                                                ></div>
+                                                <div className="absolute right-8 top-10 w-36 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-slate-100/50 py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150">
+                                                    <button
+                                                        onClick={() => {
+                                                            navigate(`/orders/${order._id || order.id}`);
+                                                            setActiveDropdown(null);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50/80 hover:text-[#0f6845] transition-colors flex items-center gap-2 font-medium"
+                                                    >
+                                                        <EyeIcon className="w-4 h-4" />
+                                                        View Details
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             ))

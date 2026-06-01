@@ -67,8 +67,9 @@ const AddEditProduct = () => {
             try {
                 if (categories.length === 0) {
                     const catRes = await api.get(CATEGORIES);
-                    const categoryData =
-                        catRes.data?.data?.categories || catRes.data?.data || [];
+                    const categoryData = Array.isArray(catRes.data)
+                        ? catRes.data
+                        : (catRes.data?.data?.categories || catRes.data?.data || []);
                     dispatch(
                         setCategories(Array.isArray(categoryData) ? categoryData : [])
                     );

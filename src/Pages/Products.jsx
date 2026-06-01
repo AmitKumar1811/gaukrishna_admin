@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setProducts, setLoading, deleteProduct } from "../store/productSlice";
+import { setCategories } from "../store/categorySlice";
 import api from "../../services/AxiosInstance";
-import { PRODUCTS } from "../../services/Admin/adminEndPoints";
+import { PRODUCTS, CATEGORIES } from "../../services/Admin/adminEndPoints";
 import { toast } from "react-toastify";
 import { XMarkIcon, PhotoIcon, EllipsisVerticalIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
@@ -11,7 +12,7 @@ const Products = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { products, loading } = useSelector((state) => state.products);
-
+    const { categories } = useSelector((state) => state.categories);
     // Confirmation Modal and Dropdown State
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
@@ -28,15 +29,40 @@ const Products = () => {
     const fetchData = async () => {
         dispatch(setLoading(true));
         try {
-            const prodRes = await api.get(PRODUCTS);
+            const [prodRes, catRes] = await Promise.all([
+                api.get(PRODUCTS),
+                categories.length === 0 ? api.get(CATEGORIES) : Promise.resolve(null)
+            ]);
+            
             const productData = prodRes.data?.data?.products || prodRes.data?.data || [];
             dispatch(setProducts(Array.isArray(productData) ? productData : []));
+
+            if (catRes) {
+                const categoryData = Array.isArray(catRes.data) 
+                    ? catRes.data 
+                    : (catRes.data?.data?.categories || catRes.data?.data || []);
+                dispatch(setCategories(Array.isArray(categoryData) ? categoryData : []));
+            }
         } catch (error) {
             console.error(error);
             toast.error("Failed to fetch data");
         } finally {
             dispatch(setLoading(false));
         }
+    };
+
+    const getCategoryName = (product) => {
+        if (product.categoryId?.name) return product.categoryId.name;
+        if (product.category?.name) return product.category.name;
+        
+        const catId = product.categoryId?._id || product.categoryId?.id || product.categoryId || 
+                      product.category?._id || product.category?.id || product.category;
+                      
+        if (catId) {
+            const found = categories.find(c => c._id === catId || c.id === catId);
+            if (found) return found.name;
+        }
+        return "Uncategorized";
     };
 
     useEffect(() => {
@@ -154,7 +180,7 @@ const Products = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                            {product.categoryId?.name || product.category?.name || "Uncategorized"}
+                                            {getCategoryName(product)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 font-bold text-slate-900 text-base">₹{product.price}</td>

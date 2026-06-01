@@ -4,7 +4,7 @@ import { setCategories, setLoading, addCategory, updateCategory, deleteCategory 
 import api from "../../services/AxiosInstance";
 import { CATEGORIES } from "../../services/Admin/adminEndPoints";
 import { toast } from "react-toastify";
-import { XMarkIcon, PhotoIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, PhotoIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { uploadFileToFirebase } from "../utils/imageUpload";
 
 const Categories = () => {
@@ -27,6 +27,9 @@ const Categories = () => {
     // Confirmation Modal State
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
+
+    // Dropdown state
+    const [activeDropdown, setActiveDropdown] = useState(null);
 
     const fetchCategories = useCallback(async () => {
         dispatch(setLoading(true));
@@ -152,59 +155,59 @@ const Categories = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-6 bg-slate-50/50 min-h-screen relative">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Categories</h1>
-                    <p className="text-gray-500 text-sm">Manage your product categories</p>
+                    <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Categories</h1>
+                    <p className="text-slate-500 text-sm mt-0.5">Manage your product categories</p>
                 </div>
                 <button
                     onClick={handleOpenAddModal}
-                    className="cursor-pointer bg-[#0f6845] text-white px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-all shadow-sm flex items-center gap-2 font-medium"
+                    className="cursor-pointer bg-[#0f6845] hover:bg-[#0b4d33] text-white px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-2 font-semibold text-sm"
                 >
-                    <span className="text-xl">+</span> Add Category
+                    <span className="text-lg font-bold">+</span> Add Category
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50/50 border-b border-gray-100 text-gray-500 uppercase text-xs font-semibold">
+            <div className="bg-white rounded-2xl shadow-xl shadow-slate-100/40 border border-slate-100 overflow-visible">
+                <table className="w-full text-left border-collapse">
+                    <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase text-[11px] font-bold tracking-wider">
                         <tr>
-                            <th className="px-6 py-4">Image</th>
+                            <th className="px-6 py-4 rounded-tl-2xl">Image</th>
                             <th className="px-6 py-4">Name</th>
                             <th className="px-6 py-4">Slug</th>
                             <th className="px-6 py-4">Created At</th>
                             <th className="px-6 py-4">Status</th>
-                            <th className="px-6 py-4 text-right">Actions</th>
+                            <th className="px-6 py-4 text-right rounded-tr-2xl">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className="divide-y divide-slate-100">
                         {loading ? (
                             <tr>
-                                <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                <td colSpan="6" className="px-6 py-12 text-center text-slate-400">
                                     <div className="flex flex-col items-center">
-                                        <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-2"></div>
-                                        <span>Loading categories...</span>
+                                        <div className="w-8 h-8 border-4 border-slate-200 border-t-[#0f6845] rounded-full animate-spin mb-2"></div>
+                                        <span className="text-sm font-medium">Loading categories...</span>
                                     </div>
                                 </td>
                             </tr>
                         ) : categories.length === 0 ? (
                             <tr>
-                                <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                <td colSpan="6" className="px-6 py-12 text-center text-slate-400">
                                     <div className="flex flex-col items-center">
-                                        <div className="bg-gray-50 p-4 rounded-full mb-3">
-                                            <PhotoIcon className="w-8 h-8 text-gray-300" />
+                                        <div className="bg-slate-50 p-4 rounded-full mb-3">
+                                            <PhotoIcon className="w-8 h-8 text-slate-300" />
                                         </div>
-                                        <p className="font-medium text-gray-600">No categories found</p>
-                                        <p className="text-sm">Click "Add Category" to create your first one.</p>
+                                        <p className="font-semibold text-slate-600 text-base">No categories found</p>
+                                        <p className="text-sm text-slate-400 mt-0.5">Click "Add Category" to create your first one.</p>
                                     </div>
                                 </td>
                             </tr>
                         ) : (
                             categories.map((category) => (
-                                <tr key={category._id || category.id} className="hover:bg-gray-50/50 transition-colors">
+                                <tr key={category._id || category.id} className="hover:bg-slate-50/50 transition-colors duration-150">
                                     <td className="px-6 py-4">
-                                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                                        <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-50 border border-slate-100 shadow-sm flex-shrink-0 transition-transform duration-200 hover:scale-105">
                                             <img
                                                 src={category.image || "https://placehold.co/48x48?text=N/A"}
                                                 alt={category.name}
@@ -212,32 +215,58 @@ const Categories = () => {
                                             />
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 font-medium text-gray-900 capitalize">{category.name}</td>
-                                    <td className="px-6 py-4 text-gray-500 font-mono text-sm">{category.slug}</td>
-                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                    <td className="px-6 py-4 font-semibold text-slate-800 text-[15px] capitalize">{category.name}</td>
+                                    <td className="px-6 py-4 text-slate-500 font-mono text-sm tracking-wider">{category.slug}</td>
+                                    <td className="px-6 py-4 text-slate-500 text-sm font-medium">
                                         {category.createdAt ? new Date(category.createdAt).toLocaleDateString() : "N/A"}
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${category.isActive
-                                            ? "bg-green-50 text-green-700 border-green-100"
-                                            : "bg-red-50 text-red-700 border-red-100"
+                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${category.isActive
+                                            ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                            : "bg-rose-50 text-rose-700 border-rose-100"
                                             }`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${category.isActive ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`}></span>
                                             {category.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right whitespace-nowrap">
+                                    <td className="px-6 py-4 text-right whitespace-nowrap relative">
                                         <button
-                                            onClick={() => handleOpenEditModal(category)}
-                                            className="text-blue-600 hover:text-blue-800 font-medium mr-4 transition-colors"
+                                            onClick={() => setActiveDropdown(activeDropdown === (category._id || category.id) ? null : (category._id || category.id))}
+                                            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all focus:outline-none"
                                         >
-                                            Edit
+                                            <EllipsisVerticalIcon className="w-5 h-5" />
                                         </button>
-                                        <button
-                                            onClick={() => openDeleteConfirm(category)}
-                                            className="text-red-600 hover:text-red-800 font-medium transition-colors"
-                                        >
-                                            Delete
-                                        </button>
+                                        
+                                        {activeDropdown === (category._id || category.id) && (
+                                            <>
+                                                <div 
+                                                    className="fixed inset-0 z-10"
+                                                    onClick={() => setActiveDropdown(null)}
+                                                ></div>
+                                                <div className="absolute right-8 top-10 w-36 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-slate-100/50 py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150">
+                                                    <button
+                                                        onClick={() => {
+                                                            handleOpenEditModal(category);
+                                                            setActiveDropdown(null);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50/80 hover:text-[#0f6845] transition-colors flex items-center gap-2 font-medium"
+                                                    >
+                                                        <PencilSquareIcon className="w-4 h-4" />
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            openDeleteConfirm(category);
+                                                            setActiveDropdown(null);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/80 transition-colors flex items-center gap-2 font-medium"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             ))
