@@ -154,7 +154,7 @@ const Products = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                            {product.category?.name || "Uncategorized"}
+                                            {product.categoryId?.name || product.category?.name || "Uncategorized"}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 font-bold text-slate-900 text-base">₹{product.price}</td>

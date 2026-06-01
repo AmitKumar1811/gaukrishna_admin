@@ -98,7 +98,10 @@ const AddEditProduct = () => {
                             name: product.name || "",
                             slug: product.slug || "",
                             sku: product.sku || "",
-                            category:
+                             category:
+                                product.categoryId?._id ||
+                                product.categoryId?.id ||
+                                product.categoryId ||
                                 product.category?._id ||
                                 product.category?.id ||
                                 product.category ||
