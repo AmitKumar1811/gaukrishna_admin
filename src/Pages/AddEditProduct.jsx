@@ -341,7 +341,6 @@ const AddEditProduct = () => {
                 slug: formData.slug.trim(),
                 sku: (formData.sku || "").trim(),
                 categoryId: formData.category,
-                category_id: formData.category,
                 mrp: Number(formData.mrp),
                 price: Number(formData.price),
                 stock: Number(formData.stock),
