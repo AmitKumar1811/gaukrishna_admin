@@ -612,7 +612,7 @@ const ProgramForm = () => {
 
                       {/* <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
                         <div className="flex items-center h-5">
-                          <Field type="checkbox" name="isCommentaryEnabled" id="commentary" className="w-4 h-4 text-[#0f6845] bg-gray-100 border-gray-300 rounded focus:ring-[#0f6845]" />
+                          <Field type="checkbox" name="isCommentaryEnabled" id="commentary" className="w-4 h-4 text-brand-600 bg-gray-100 border-gray-300 rounded focus:ring-brand-600" />
                         </div>
                         <div className="text-sm">
                           <label htmlFor="commentary" className="font-medium text-gray-900">Enable Commentary</label>

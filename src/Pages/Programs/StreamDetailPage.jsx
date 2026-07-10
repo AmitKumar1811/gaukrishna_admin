@@ -158,19 +158,19 @@ const StreamDetailsPage = () => {
                     <ChevronLeftIcon className="w-6 h-6 text-gray-600" />
                 </button>
                 <div>
-                    <h1 className="text-2xl font-bold text-[#0f6845]">{stream?.streamName || "Stream Details"}</h1>
+                    <h1 className="text-2xl font-bold text-brand-600">{stream?.streamName || "Stream Details"}</h1>
                 </div>
             </div>
             <div className="flex gap-4 border-b border-gray-200">
                 <button
                     onClick={() => setActiveTab("commands")}
-                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "commands" ? "border-b-2 border-[#0f6845] text-[#0f6845]" : "text-gray-500"}`}
+                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "commands" ? "border-b-2 border-brand-600 text-brand-600" : "text-gray-500"}`}
                 >
                     Commands ({allCommands.length})
                 </button>
                 <button
                     onClick={() => setActiveTab("scorecards")}
-                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "scorecards" ? "border-b-2 border-[#0f6845] text-[#0f6845]" : "text-gray-500"}`}
+                    className={`pb-2 px-4 cursor-pointer font-medium ${activeTab === "scorecards" ? "border-b-2 border-brand-600 text-brand-600" : "text-gray-500"}`}
                 >
                     Scorecards ({allScorecards.length})
                 </button>
@@ -254,7 +254,7 @@ const StreamDetailsPage = () => {
                                             </span>
                                         </td>
                                         <td className="p-4">
-                                            <span className="text-[#0f6845] font-medium text-sm hover:underline">View Details</span>
+                                            <span className="text-brand-600 font-medium text-sm hover:underline">View Details</span>
                                         </td>
                                     </tr>
                                 ))}

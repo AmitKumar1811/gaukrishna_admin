@@ -383,30 +383,30 @@ const AddEditProduct = () => {
 
     if (isLoadingInit) {
         return (
-            <div className="flex justify-center items-center h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className="flex justify-center items-center h-screen bg-slate-50">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-slate-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-medium">Loading...</p>
+                    <div className="w-10 h-10 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-slate-500 font-medium text-sm">Loading product data...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-8 animate-fadeIn">
+                <div className="mb-8">
                     <button
                         onClick={() => navigate("/products")}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-white hover:shadow-sm transition-all duration-200 mb-6 group"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:bg-white hover:shadow-sm hover:text-slate-700 transition-all duration-200 mb-6 group cursor-pointer"
                     >
-                        <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                        <span className="text-sm font-medium">Back to Products</span>
+                        <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform stroke-[2.5]" />
+                        <span className="text-[13px] font-semibold">Back to Products</span>
                     </button>
 
                     <div className="flex items-start justify-between">
                         <div>
-                            <p className="text-gray-500 text-base">
+                            <p className="text-slate-500 text-sm font-medium">
                                 {isEditMode
                                     ? "Update product information and details"
                                     : "Create a new product with all the necessary information"}
@@ -415,8 +415,8 @@ const AddEditProduct = () => {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                    <div className="bg-gradient-to-r from-purple-600 to-blue-600 h-1"></div>
+                <div className="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+                    <div className="bg-gradient-to-r from-brand-600 to-brand-500 h-1"></div>
 
                     <div className="p-8 lg:p-10">
                         <form onSubmit={handleSubmit} className="space-y-8">
@@ -433,9 +433,9 @@ const AddEditProduct = () => {
                                             value={formData.name}
                                             onChange={handleInputChange}
                                             placeholder="Enter product name (e.g., Fresh Organic Milk)"
-                                            className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none ${formErrors.name
-                                                ? "border-red-300 bg-red-50"
-                                                : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none text-[14px] shadow-sm ${formErrors.name
+                                                ? "border-rose-300 bg-rose-50"
+                                                : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                 }`}
                                         />
                                     </FormField>
@@ -449,11 +449,11 @@ const AddEditProduct = () => {
                                             onChange={handleInputChange}
                                             placeholder="e.g., fresh-organic-milk"
                                             readOnly={isEditMode}
-                                            className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none ${isEditMode
-                                                ? "bg-gray-50 text-gray-500 border-gray-200 cursor-not-allowed"
+                                            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none text-[14px] shadow-sm ${isEditMode
+                                                ? "bg-slate-50 text-slate-500 border-slate-200 cursor-not-allowed"
                                                 : formErrors.slug
-                                                    ? "border-red-300 bg-red-50"
-                                                    : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                                    ? "border-rose-300 bg-rose-50"
+                                                    : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                 }`}
                                         />
                                     </FormField>
@@ -469,9 +469,9 @@ const AddEditProduct = () => {
                                                 name="category"
                                                 value={formData.category}
                                                 onChange={handleInputChange}
-                                                className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none appearance-none cursor-pointer ${formErrors.category
-                                                    ? "border-red-300 bg-red-50"
-                                                    : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                                className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none appearance-none cursor-pointer text-[14px] shadow-sm ${formErrors.category
+                                                    ? "border-rose-300 bg-rose-50"
+                                                    : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                     }`}
                                                 style={{
                                                     backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
@@ -503,9 +503,9 @@ const AddEditProduct = () => {
                                                 value={formData.sku}
                                                 onChange={handleInputChange}
                                                 placeholder="e.g., MILK-1L-001"
-                                                className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none ${formErrors.sku
-                                                    ? "border-red-300 bg-red-50"
-                                                    : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                                className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none text-[14px] shadow-sm ${formErrors.sku
+                                                    ? "border-rose-300 bg-rose-50"
+                                                    : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                     }`}
                                             />
                                         </FormField>
@@ -518,7 +518,7 @@ const AddEditProduct = () => {
                                                 value={formData.weight}
                                                 onChange={handleInputChange}
                                                 placeholder="e.g., 5L, 500ml"
-                                                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none"
+                                                className="w-full px-4 py-3 rounded-lg border border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none text-[14px] shadow-sm"
                                             />
                                         </FormField>
                                     </div>
@@ -531,7 +531,7 @@ const AddEditProduct = () => {
                                                 value={formData.benefits}
                                                 onChange={handleBenefitsChange}
                                                 placeholder="Write product benefits..."
-                                                className="quill-editor border-gray-200"
+                                                className="quill-editor border-slate-200"
                                                 modules={{
                                                     toolbar: [
                                                         ['bold', 'italic', 'underline', 'strike'],
@@ -581,9 +581,9 @@ const AddEditProduct = () => {
                                                 placeholder="0.00"
                                                 min="0"
                                                 step="0.01"
-                                                className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none ${formErrors.mrp
-                                                    ? "border-red-300 bg-red-50"
-                                                    : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                                className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none text-[14px] shadow-sm ${formErrors.mrp
+                                                    ? "border-rose-300 bg-rose-50"
+                                                    : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                     }`}
                                             />
                                         </FormField>
@@ -602,9 +602,9 @@ const AddEditProduct = () => {
                                                 placeholder="0.00"
                                                 min="0"
                                                 step="0.01"
-                                                className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none ${formErrors.price
-                                                    ? "border-red-300 bg-red-50"
-                                                    : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                                className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none text-[14px] shadow-sm ${formErrors.price
+                                                    ? "border-rose-300 bg-rose-50"
+                                                    : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                     }`}
                                             />
                                         </FormField>
@@ -622,70 +622,70 @@ const AddEditProduct = () => {
                                                 onChange={handleInputChange}
                                                 placeholder="0"
                                                 min="0"
-                                                className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none ${formErrors.stock
-                                                    ? "border-red-300 bg-red-50"
-                                                    : "border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white"
+                                                className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 outline-none text-[14px] shadow-sm ${formErrors.stock
+                                                    ? "border-rose-300 bg-rose-50"
+                                                    : "border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                                                     }`}
                                             />
                                         </FormField>
                                     </div>
 
                                     {/* Attributes UI */}
-                                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 mt-6">
+                                    <div className="bg-slate-50/70 p-6 rounded-xl border border-slate-100 mt-6">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-lg font-semibold text-gray-800">Product Attributes</h3>
+                                            <h3 className="text-base font-bold text-slate-800">Product Attributes</h3>
                                             <button
                                                 type="button"
                                                 onClick={addAttribute}
-                                                className="text-sm px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 font-medium transition-colors"
+                                                className="text-[13px] px-3.5 py-1.5 bg-brand-50 text-brand-700 rounded-lg hover:bg-brand-100 font-semibold transition-colors cursor-pointer border border-brand-200"
                                             >
                                                 + Add Attribute
                                             </button>
                                         </div>
                                         <div className="space-y-3">
                                             {formData.attributes.map((attr, index) => (
-                                                <div key={index} className="flex gap-4 items-start">
+                                                <div key={index} className="flex gap-3 items-start">
                                                     <input
                                                         type="text"
                                                         placeholder="Key (e.g., benefits)"
                                                         value={attr.key}
                                                         onChange={(e) => handleAttributeChange(index, "key", e.target.value)}
-                                                        className="w-1/3 px-4 py-2 border-2 rounded-lg border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none text-sm"
+                                                        className="w-1/3 px-4 py-2.5 border rounded-lg border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none text-[13px] shadow-sm"
                                                     />
                                                     <input
                                                         type="text"
                                                         placeholder="Value (e.g., Boosts Immunity)"
                                                         value={attr.value}
                                                         onChange={(e) => handleAttributeChange(index, "value", e.target.value)}
-                                                        className="flex-1 px-4 py-2 border-2 rounded-lg border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none text-sm"
+                                                        className="flex-1 px-4 py-2.5 border rounded-lg border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none text-[13px] shadow-sm"
                                                     />
                                                     <button
                                                         type="button"
                                                         onClick={() => removeAttribute(index)}
-                                                        className="text-red-500 hover:text-red-700 font-medium px-2 py-2"
+                                                        className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 font-medium px-2 py-2 rounded-lg transition-colors cursor-pointer"
                                                     >
                                                         ✕
                                                     </button>
                                                 </div>
                                             ))}
                                             {formData.attributes.length === 0 && (
-                                                <p className="text-gray-500 text-sm italic">No attributes added yet. Click "+ Add Attribute" to start.</p>
+                                                <p className="text-slate-400 text-sm italic font-medium">No attributes added yet. Click "+ Add Attribute" to start.</p>
                                             )}
                                         </div>
                                     </div>
 
                                     {/* Toggles */}
                                     <div className="flex flex-wrap gap-6 pt-2">
-                                        <label className="flex items-center gap-2 cursor-pointer font-medium text-gray-700">
-                                            <input type="checkbox" name="is_best_seller" checked={formData.is_best_seller} onChange={handleInputChange} className="w-5 h-5 text-purple-600 rounded border-gray-300 focus:ring-purple-500 cursor-pointer" />
+                                        <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-slate-700 text-[13px]">
+                                            <input type="checkbox" name="is_best_seller" checked={formData.is_best_seller} onChange={handleInputChange} className="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer" />
                                             Best Seller
                                         </label>
-                                        <label className="flex items-center gap-2 cursor-pointer font-medium text-gray-700">
-                                            <input type="checkbox" name="is_new_launch" checked={formData.is_new_launch} onChange={handleInputChange} className="w-5 h-5 text-purple-600 rounded border-gray-300 focus:ring-purple-500 cursor-pointer" />
+                                        <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-slate-700 text-[13px]">
+                                            <input type="checkbox" name="is_new_launch" checked={formData.is_new_launch} onChange={handleInputChange} className="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer" />
                                             New Launch
                                         </label>
-                                        <label className="flex items-center gap-2 cursor-pointer font-medium text-gray-700">
-                                            <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="w-5 h-5 text-purple-600 rounded border-gray-300 focus:ring-purple-500 cursor-pointer" />
+                                        <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-slate-700 text-[13px]">
+                                            <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer" />
                                             Active Status
                                         </label>
                                     </div>
@@ -700,7 +700,7 @@ const AddEditProduct = () => {
                                     >
                                         <div className="grid grid-cols-2 gap-4">
                                             {images.map((img, idx) => (
-                                                <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                                                <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50">
                                                     <img
                                                         src={img.url}
                                                         alt={`Preview ${idx + 1}`}
@@ -709,7 +709,7 @@ const AddEditProduct = () => {
                                                     <button
                                                         type="button"
                                                         onClick={() => removeImage(img.id)}
-                                                        className="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-700 transition-all duration-200 shadow-md cursor-pointer"
+                                                        className="absolute top-2 right-2 p-1.5 bg-rose-600 text-white rounded-lg opacity-0 group-hover:opacity-100 hover:bg-rose-700 transition-all duration-200 shadow-md cursor-pointer"
                                                     >
                                                         <TrashIcon className="w-4 h-4" />
                                                     </button>
@@ -718,13 +718,13 @@ const AddEditProduct = () => {
                                             
                                             <div
                                                 onClick={() => fileInputRef.current?.click()}
-                                                className="relative group cursor-pointer aspect-square rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-gray-300 hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50"
+                                                className="relative group cursor-pointer aspect-square rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-brand-400 transition-all duration-200 bg-slate-50 hover:bg-brand-50"
                                             >
-                                                <div className="mb-2 p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
-                                                    <PhotoIcon className="w-5 h-5 text-purple-600" />
+                                                <div className="mb-2 p-2 bg-brand-100 rounded-lg group-hover:bg-brand-200 transition-colors">
+                                                    <PhotoIcon className="w-5 h-5 text-brand-600" />
                                                 </div>
-                                                <span className="text-xs font-semibold text-gray-700">Add Image</span>
-                                                <span className="text-[10px] text-gray-500 mt-0.5">PNG, JPG up to 5MB</span>
+                                                <span className="text-xs font-bold text-slate-700">Add Image</span>
+                                                <span className="text-[10px] text-slate-500 mt-0.5 font-medium">PNG, JPG up to 5MB</span>
                                             </div>
                                         </div>
 
@@ -751,7 +751,7 @@ const AddEditProduct = () => {
                                     onChange={handleInputChange}
                                     placeholder="A brief catchy description..."
                                     rows="5"
-                                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none resize-none"
+                                    className="w-full px-4 py-3 rounded-lg border border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none resize-none text-[14px] shadow-sm"
                                 />
                             </FormField>
                             <FormField
@@ -765,7 +765,7 @@ const AddEditProduct = () => {
                                         value={formData.description}
                                         onChange={handleDescriptionChange}
                                         placeholder="Write a detailed product description, features, and benefits..."
-                                        className={`quill-editor ${formErrors.description ? "border-red-300" : "border-gray-200"}`}
+                                        className={`quill-editor ${formErrors.description ? "border-rose-300" : "border-slate-200"}`}
                                         modules={{
                                             toolbar: [
                                                 [{ 'header': [1, 2, 3, false] }],
@@ -782,36 +782,36 @@ const AddEditProduct = () => {
 
 
                             {/* ============= SEO ============= */}
-                            <div className="bg-gray-50 p-6 lg:p-8 rounded-xl border border-gray-100">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-6">SEO Details</h3>
+                            <div className="bg-slate-50/70 p-6 lg:p-8 rounded-xl border border-slate-100">
+                                <h3 className="text-base font-bold text-slate-800 mb-6">SEO Details</h3>
                                 <div className="space-y-6">
                                     <FormField label="Meta Title">
-                                        <input type="text" name="seo_title" value={formData.seo.title} onChange={handleInputChange} placeholder="e.g., Amla & Ashwagandha Chyawanprash | Boost Immunity naturally" className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none" />
+                                        <input type="text" name="seo_title" value={formData.seo.title} onChange={handleInputChange} placeholder="e.g., Amla & Ashwagandha Chyawanprash | Boost Immunity naturally" className="w-full px-4 py-3 rounded-lg border border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none text-[14px] shadow-sm" />
                                     </FormField>
                                     <FormField label="Meta Description">
-                                        <textarea name="seo_description" value={formData.seo.description} onChange={handleInputChange} placeholder="Enter a rich meta description..." rows="3" className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none resize-none" />
+                                        <textarea name="seo_description" value={formData.seo.description} onChange={handleInputChange} placeholder="Enter a rich meta description..." rows="3" className="w-full px-4 py-3 rounded-lg border border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none resize-none text-[14px] shadow-sm" />
                                     </FormField>
                                     <FormField label="Keywords">
-                                        <input type="text" name="seo_keywords" value={formData.seo.keywords} onChange={handleInputChange} placeholder="e.g., chyawanprash, immunity booster, amla" className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-purple-200 focus:border-purple-500 bg-white transition-all duration-200 outline-none" />
+                                        <input type="text" name="seo_keywords" value={formData.seo.keywords} onChange={handleInputChange} placeholder="e.g., chyawanprash, immunity booster, amla" className="w-full px-4 py-3 rounded-lg border border-slate-200 hover:border-brand-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 outline-none text-[14px] shadow-sm" />
                                     </FormField>
                                 </div>
                             </div>
 
                             {/* ============= Form Actions ============= */}
-                            <div className="flex items-center justify-between pt-6 mt-8 border-t border-gray-100">
-                                <div className="text-sm text-gray-500">
+                            <div className="flex items-center justify-between pt-6 mt-8 border-t border-slate-100">
+                                <div className="text-[13px] text-slate-400 font-medium">
                                     {isEditMode ? (
-                                        <p>Editing product • ID: {selectedProductId}</p>
+                                        <p>Editing product • ID: <span className="font-mono text-[12px] text-slate-500">{selectedProductId}</span></p>
                                     ) : (
                                         <p>Creating a new product</p>
                                     )}
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="flex gap-3">
                                     <button
                                         type="button"
                                         onClick={() => navigate("/products")}
-                                        className="px-6 py-2.5 rounded-lg border-2 border-gray-300 text-gray-700 font-medium bg-white hover:bg-gray-50 transition-all duration-200 hover:border-gray-400"
+                                        className="px-5 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-semibold text-[13px] bg-white hover:bg-slate-50 hover:text-slate-800 transition-all duration-200 cursor-pointer"
                                     >
                                         Cancel
                                     </button>
@@ -819,7 +819,7 @@ const AddEditProduct = () => {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="px-8 py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium hover:shadow-lg hover:shadow-purple-200 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-max"
+                                        className="px-6 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-[13px] shadow-sm transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[160px] active:scale-95 cursor-pointer"
                                     >
                                         {isSubmitting ? (
                                             <>
@@ -850,13 +850,13 @@ const AddEditProduct = () => {
 const FormField = ({ label, error, required, children, small = false }) => {
     return (
         <div>
-            <label className="flex items-center gap-1 text-sm font-semibold text-gray-700 mb-2">
+            <label className="flex items-center gap-1 text-[13px] font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
                 {label}
-                {required && <span className="text-red-500">*</span>}
+                {required && <span className="text-rose-500">*</span>}
             </label>
             {children}
             {error && (
-                <div className="flex items-center gap-1 mt-2 text-sm text-red-600">
+                <div className="flex items-center gap-1 mt-1.5 text-[13px] text-rose-600 font-medium">
                     <ExclamationIcon className="w-4 h-4" />
                     <span>{error}</span>
                 </div>

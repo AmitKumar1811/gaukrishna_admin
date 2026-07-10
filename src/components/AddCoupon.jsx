@@ -60,7 +60,7 @@ const CouponModal = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#0f6845] text-white rounded"
+                  className="px-4 py-2 bg-brand-600 text-white rounded"
                 >
                   {isEditing ? "Update" : "Create"}
                 </button>

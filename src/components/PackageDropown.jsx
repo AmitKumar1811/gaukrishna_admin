@@ -67,7 +67,7 @@ const PackageDropdown = ({
               return (
                 <span
                   key={id}
-                  className="bg-[#F3E8FF] text-[#0f6845] px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                  className="bg-[#F3E8FF] text-brand-600 px-3 py-1 rounded-full text-sm flex items-center gap-2"
                 >
                   {item?.[labelKey] || id}
                   <button
@@ -91,7 +91,7 @@ const PackageDropdown = ({
             }}
             onFocus={() => setOpen(true)}
             placeholder="Select from list"
-            className="mt-2 w-full border  border-gray-300  rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845]"
+            className="mt-2 w-full border  border-gray-300  rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-600"
           />
 
           {/* Dropdown */}

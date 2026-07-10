@@ -53,7 +53,7 @@ const StreamFullDetails = ({ open, onClose, programId, streamData }) => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <Dialog.Panel className="w-full max-w-4xl bg-white rounded-xl shadow-lg max-h-[90vh] overflow-y-auto">
                     <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b flex justify-between items-center">
-                        <Dialog.Title className="text-xl font-semibold text-[#0f6845]">
+                        <Dialog.Title className="text-xl font-semibold text-brand-600">
                             Stream Details: {streamData?.streamName}
                         </Dialog.Title>
                         <button
@@ -72,7 +72,7 @@ const StreamFullDetails = ({ open, onClose, programId, streamData }) => {
                         ) : (
                             <>
                                 <section>
-                                    <h3 className="text-lg font-bold text-gray-800 mb-4 border-l-4 border-[#0f6845] pl-2">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-4 border-l-4 border-brand-600 pl-2">
                                         Commentary & Scorecard
                                     </h3>
                                     {scorecard ? (
@@ -82,7 +82,7 @@ const StreamFullDetails = ({ open, onClose, programId, streamData }) => {
                                                 <div>
                                                     <p className="text-sm text-gray-500">{scorecard.seriesName}</p>
                                                     <p className="font-semibold text-lg">{scorecard.matchDetails?.matchDescription} - {scorecard.matchDetails?.matchFormat}</p>
-                                                    <p className="text-[#0f6845] font-medium">{scorecard.status}</p>
+                                                    <p className="text-brand-600 font-medium">{scorecard.status}</p>
                                                 </div>
                                                 <div className="text-right text-sm text-gray-600">
                                                     <p>{scorecard.matchDetails?.matchStartTimeIST}</p>
@@ -112,7 +112,7 @@ const StreamFullDetails = ({ open, onClose, programId, streamData }) => {
                                 </section>
 
                                 <section>
-                                    <h3 className="text-lg font-bold text-gray-800 mb-4 border-l-4 border-[#0f6845] pl-2">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-4 border-l-4 border-brand-600 pl-2">
                                         Commands Log
                                     </h3>
                                     {commands.length > 0 ? (

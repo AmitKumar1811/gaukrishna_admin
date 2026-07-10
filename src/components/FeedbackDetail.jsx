@@ -100,7 +100,7 @@ const FeedbackDetail = () => {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#f8f9fa]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-4 border-[#0f6845] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-brand-600 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-gray-500 font-medium ml-2">Loading feedback details...</p>
         </div>
       </div>
@@ -179,7 +179,7 @@ const FeedbackDetail = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 border-b border-gray-50 flex flex-wrap justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-100 text-[#0f6845] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-purple-100 text-brand-600 flex items-center justify-center">
                     <i className="fa-solid fa-terminal text-lg"></i>
                   </div>
                   <div>
@@ -252,13 +252,13 @@ const FeedbackDetail = () => {
             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-4">Submitted By</h3>
 
             <div className="flex items-start gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0f6845] to-blue-500 text-white flex items-center justify-center font-bold text-lg shadow-md">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-600 to-blue-500 text-white flex items-center justify-center font-bold text-lg shadow-md">
                 {user?.name ? user.name.charAt(0).toUpperCase() : "?"}
               </div>
               <div className="flex-1 min-w-0">
                 <div
                   onClick={() => feedback.userId && navigate(`/users/${feedback.userId}`)}
-                  className={`font-bold text-gray-900 truncate ${feedback.userId ? 'cursor-pointer hover:text-[#0f6845] transition-colors' : ''}`}
+                  className={`font-bold text-gray-900 truncate ${feedback.userId ? 'cursor-pointer hover:text-brand-600 transition-colors' : ''}`}
                 >
                   {user?.name || "Unknown User"}
                 </div>

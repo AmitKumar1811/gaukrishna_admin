@@ -12,11 +12,11 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../Firebase";
-import { ThreeDots } from "react-loader-spinner";
+import { FiImage, FiPlus, FiEdit2, FiX, FiCheck, FiUploadCloud } from "react-icons/fi";
 
 const ModernEditor = ({ value, onChange }) => {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#0f6845] transition-colors duration-300">
+    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:border-brand-400 transition-colors duration-300">
       <Editor
         apiKey='67wfwn36yoqbdfa5b9z2h0htonpl9fe1leq140x79yraniaz'
         value={value}
@@ -124,8 +124,9 @@ const DynamicContent = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#f8f9fa]">
-        <ThreeDots height="50" width="50" radius="9" visible={true} color="#0f6845" />
+      <div className="flex flex-col justify-center items-center min-h-screen bg-slate-50">
+        <div className="w-8 h-8 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin mb-3"></div>
+        <span className="text-sm text-slate-400 font-medium">Loading content...</span>
       </div>
     );
   }
@@ -133,25 +134,25 @@ const DynamicContent = () => {
   const currentData = contentData[activeTab];
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen p-6 font-sans text-gray-800">
+    <div className="p-6 md:p-8 bg-slate-50 min-h-screen animate-fade-in relative">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Dynamic Content</h2>
-            <p className="text-gray-500 text-sm mt-1">Manage app content and screens</p>
+            <h2 className="text-3xl font-bold text-slate-800 tracking-tight">Dynamic Content</h2>
+            <p className="text-slate-500 text-sm font-medium mt-1">Manage app content and screens</p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 flex overflow-x-auto custom-scrollbar">
+        <div className="bg-white rounded-2xl shadow-card border border-slate-100 p-2 flex overflow-x-auto custom-scrollbar">
           {Object.keys(SECTIONS).map(key => (
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`px-6 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-all
-                        ${activeTab === key ? "bg-[#0f6845] text-white shadow-md" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}
+              className={`px-6 py-3 rounded-xl text-[13px] font-semibold whitespace-nowrap transition-all cursor-pointer
+                        ${activeTab === key ? "bg-brand-600 text-white shadow-md" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"}`}
             >
               {SECTIONS[key].label}
             </button>
@@ -159,7 +160,7 @@ const DynamicContent = () => {
         </div>
 
         {/* Content Area */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+        <div className="bg-white rounded-2xl shadow-card border border-slate-100 p-6 sm:p-8">
 
           {/* View Mode: Preview */}
           {!isEditing && (
@@ -173,10 +174,10 @@ const DynamicContent = () => {
           {/* Edit Mode: Forms */}
           {isEditing && (
             <>
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center justify-between">
                 <span>Edit {SECTIONS[activeTab].label}</span>
-                <button onClick={() => setIsEditing(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-                  <i className="fa-solid fa-xmark text-gray-500"></i>
+                <button onClick={() => setIsEditing(false)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors text-slate-400 cursor-pointer">
+                  <FiX className="w-5 h-5" />
                 </button>
               </h3>
 
@@ -250,18 +251,18 @@ const SectionPreview = ({ data, type, onEdit }) => {
   if (!data) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
-          <i className="fa-regular fa-file-image text-2xl"></i>
+        <div className="bg-slate-50 p-4 rounded-full mb-4">
+          <FiImage className="w-8 h-8 text-slate-300 stroke-[1.5]" />
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">No Content Yet</h3>
-        <p className="text-gray-500 max-w-sm mx-auto mb-6 text-sm">
+        <h3 className="text-lg font-bold text-slate-800 mb-2">No Content Yet</h3>
+        <p className="text-slate-500 max-w-sm mx-auto mb-6 text-sm font-medium">
           It looks like this section hasn't been set up yet. Add detail to get started.
         </p>
         <button
           onClick={onEdit}
-          className="px-6 py-2.5 bg-[#0f6845] text-white rounded-xl text-sm font-semibold hover:bg-[#7f00d4] transition-all shadow-md active:scale-95 flex items-center gap-2"
+          className="px-6 py-2.5 bg-brand-600 text-white rounded-lg text-[13px] font-semibold hover:bg-brand-700 transition-all shadow-sm active:scale-95 flex items-center gap-2 cursor-pointer"
         >
-          <i className="fa-solid fa-plus"></i> Add Content
+          <FiPlus className="w-4 h-4" /> Add Content
         </button>
       </div>
     )
@@ -269,16 +270,16 @@ const SectionPreview = ({ data, type, onEdit }) => {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex justify-between items-start mb-8 border-b border-gray-100 pb-6">
+      <div className="flex justify-between items-start mb-8 border-b border-slate-100 pb-6">
         <div>
-          <span className="text-xs font-bold text-[#0f6845] uppercase tracking-wider mb-1 block">Preview</span>
-          <h3 className="text-2xl font-bold text-gray-900">{type === 'about_us' ? data.title : SECTIONS[type].label}</h3>
+          <span className="text-[11px] font-bold text-brand-600 uppercase tracking-wider mb-1 block">Preview</span>
+          <h3 className="text-2xl font-bold text-slate-800">{type === 'about_us' ? data.title : SECTIONS[type].label}</h3>
         </div>
         <button
           onClick={onEdit}
-          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-purple-50 text-[#0f6845] font-medium border border-[#0f6845]/20 hover:bg-[#0f6845] hover:text-white transition-all shadow-sm active:scale-95 text-sm"
+          className="flex items-center gap-2 px-5 py-2 rounded-lg bg-brand-50 text-brand-700 font-semibold border border-brand-200 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all shadow-sm active:scale-95 text-[13px] cursor-pointer"
         >
-          <i className="fa-regular fa-pen-to-square"></i> Edit Content
+          <FiEdit2 className="w-4 h-4" /> Edit Content
         </button>
       </div>
 
@@ -291,7 +292,7 @@ const SectionPreview = ({ data, type, onEdit }) => {
             </div>
           )}
           <div
-            className="prose prose-lg max-w-none text-gray-600 prose-headings:text-gray-900 prose-a:text-[#0f6845]"
+            className="prose prose-lg max-w-none text-slate-600 prose-headings:text-slate-800 prose-a:text-brand-600"
             dangerouslySetInnerHTML={{ __html: data.description }}
           />
         </div>
@@ -305,7 +306,7 @@ const SectionPreview = ({ data, type, onEdit }) => {
               <img src={data.image} alt="Illustration" className="w-64 h-auto object-contain drop-shadow-sm" />
             </div>
           )}
-          <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
             <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Display Text</h4>
             <div
               className="text-gray-800"
@@ -364,7 +365,7 @@ const SectionForm = ({ initialValues, validationSchema, onSubmit, onCancel, fiel
         <FormikForm className="space-y-6 max-w-3xl animate-fade-in-up">
           {fields.map((field, idx) => (
             <div key={idx}>
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">
+              <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide mb-1.5 block">
                 {field.label}
               </label>
 
@@ -374,7 +375,7 @@ const SectionForm = ({ initialValues, validationSchema, onSubmit, onCancel, fiel
                   name={field.name}
                   value={values[field.name]}
                   onChange={(e) => setFieldValue(field.name, e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#0f6845] focus:border-[#0f6845] block p-3 outline-none transition-colors"
+                  className="w-full bg-white border border-slate-200 text-slate-800 text-[14px] rounded-lg focus:ring-2 focus:ring-brand-100 focus:border-brand-500 block p-3 outline-none transition-colors shadow-sm hover:border-brand-300"
                   placeholder={`Enter ${field.label}`}
                 />
               )}
@@ -391,10 +392,10 @@ const SectionForm = ({ initialValues, validationSchema, onSubmit, onCancel, fiel
               {field.type === 'image' && (
                 <div className="flex items-start gap-6">
                   <div className="flex-1">
-                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-brand-50 hover:border-brand-400 transition-colors">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <i className="fa-solid fa-cloud-arrow-up text-gray-400 text-2xl mb-2"></i>
-                        <p className="text-xs text-gray-500">Click to upload {field.label}</p>
+                        <FiUploadCloud className="w-6 h-6 text-slate-400 mb-2" />
+                        <p className="text-[12px] text-slate-500 font-medium">Click to upload {field.label}</p>
                       </div>
                       <input
                         type="file"
@@ -428,29 +429,29 @@ const SectionForm = ({ initialValues, validationSchema, onSubmit, onCancel, fiel
               )}
 
               {errors[field.name] && touched[field.name] && (
-                <div className="text-red-500 text-xs mt-1">{errors[field.name]}</div>
+                <div className="text-rose-600 text-[12px] font-medium mt-1">{errors[field.name]}</div>
               )}
             </div>
           ))}
 
-          <div className="pt-6 border-t border-gray-100 flex gap-4">
+          <div className="pt-6 border-t border-slate-100 flex gap-4">
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-3 rounded-xl border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 transition-colors text-sm"
+              className="px-6 py-3 rounded-lg border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition-colors text-[13px] cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-8 py-3 bg-[#0f6845] hover:bg-[#7f00d4] text-white text-sm font-semibold rounded-xl shadow-lg shadow-purple-200 transition-all hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 flex-1"
+              className="px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white text-[13px] font-semibold rounded-lg shadow-sm transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 flex-1 cursor-pointer"
             >
               {isSubmitting ? (
-                <ThreeDots height="20" width="20" color="#ffffff" visible={true} />
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
-                  Save Changes <i className="fa-solid fa-check"></i>
+                  <FiCheck className="w-4 h-4" /> Save Changes
                 </>
               )}
             </button>

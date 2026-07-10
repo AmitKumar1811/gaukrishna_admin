@@ -66,7 +66,7 @@ const StreamModal = ({ open, onClose, programId, editData, page }) => {
 
       <div className="fixed inset-0 flex items-center justify-center">
         <Dialog.Panel className="w-full max-w-md bg-white rounded-xl p-6 shadow-lg">
-          <Dialog.Title className="text-xl font-semibold text-[#0f6845] mb-4">
+          <Dialog.Title className="text-xl font-semibold text-brand-600 mb-4">
             {editData ? "Edit Stream" : "Add Stream"}
           </Dialog.Title>
 
@@ -153,7 +153,7 @@ const StreamModal = ({ open, onClose, programId, editData, page }) => {
                   <label className="text-sm font-medium">Stream Name</label>
                   <Field
                     name="streamName"
-                    className="w-full mt-1 px-3 py-2 border rounded-md focus:ring-[#0f6845]"
+                    className="w-full mt-1 px-3 py-2 border rounded-md focus:ring-brand-600"
                   />
                   {errors.streamName && touched.streamName && (
                     <p className="text-red-500 text-xs">{errors.streamName}</p>
@@ -186,7 +186,7 @@ const StreamModal = ({ open, onClose, programId, editData, page }) => {
                   {/* Upload Box */}
                   <div
                     onClick={() => !preview && fileInputRef.current.click()}
-                    className="mt-2 w-full h-40 border-2 border-dashed border-[#0f6845] rounded-xl flex items-center justify-center bg-[#FAF5FF] cursor-pointer relative overflow-hidden"
+                    className="mt-2 w-full h-40 border-2 border-dashed border-brand-600 rounded-xl flex items-center justify-center bg-[#FAF5FF] cursor-pointer relative overflow-hidden"
                   >
                     {preview ? (
                       <>
@@ -211,7 +211,7 @@ const StreamModal = ({ open, onClose, programId, editData, page }) => {
                         </button>
                       </>
                     ) : (
-                      <span className="text-[#0f6845] text-sm">
+                      <span className="text-brand-600 text-sm">
                         Click to upload image
                       </span>
                     )}
@@ -263,7 +263,7 @@ const StreamModal = ({ open, onClose, programId, editData, page }) => {
                     className={`col-span-2 mt-4 cursor-pointer p-3 rounded-lg font-semibold transition
       ${isUploading
                         ? "bg-gray-400"
-                        : "bg-[#0f6845] text-white hover:opacity-90"
+                        : "bg-brand-600 text-white hover:opacity-90"
                       }
     `}
                   >

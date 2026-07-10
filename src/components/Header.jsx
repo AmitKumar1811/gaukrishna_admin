@@ -1,24 +1,22 @@
-import { FiMenu } from "react-icons/fi";
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-// import { clearSearch, setSearchQuery } from "../store/searchSlice"; // Removed
-// import debounce from "lodash.debounce"; // Removed
-import { IoNotificationsOutline } from "react-icons/io5";
+import { useSelector, useDispatch } from "react-redux";
+import { FiMenu, FiSearch, FiBell, FiChevronDown, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
+import { logout } from "../store/authSlice";
+import { toast } from "react-toastify";
 
 export default function Header({ onMenuClick }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const [localSearch, setLocalSearch] = useState("");
-  // const searchQuery = useSelector((state) => state.search.query); // Removed
-  const dispatch = useDispatch();
-
+  
   const location = useLocation();
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    setLocalSearch("");        // instant UI clear
+    setLocalSearch("");
   }, [location.pathname]);
 
   useEffect(() => {
@@ -31,89 +29,106 @@ export default function Header({ onMenuClick }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const title = useSelector((state) => state.auth.user);
+  const handleLogout = () => {
+    try {
+      dispatch(logout());
+      toast.success("Logged out successfully");
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to logout.");
+    }
+  };
 
-  console.log("heas", title)
   return (
     <>
-      {/* ===== HEADER BAR ===== */}
-      <header className="w-full flex items-center justify-between px-5 py-4 bg-[#FFFFFF] shadow-md z-10 relative">
-        {/* Left: Menu + Search */}
-        <div className="flex items-center  gap-6">
+      <header className="w-full h-20 flex items-center justify-between px-6 bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-20">
+        {/* Left: Menu Toggle + Search */}
+        <div className="flex items-center gap-6 flex-1">
           <button
             onClick={onMenuClick}
-            className="text-white cursor-pointer bg-[#0f6845] p-2 rounded-[6px] text-2xl"
+            className="text-slate-500 hover:text-brand-900 hover:bg-brand-50 p-2 rounded-lg transition-colors cursor-pointer"
           >
-            <FiMenu />
+            <FiMenu className="w-6 h-6 stroke-[2.5]" />
           </button>
 
-          {/* 👇 Search bar hidden on small screens */}
-          <div className="relative w-full hidden md:block">
+          {/* Search bar */}
+          <div className="relative w-full max-w-md hidden md:block">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FiSearch className="text-slate-400 w-4 h-4" />
+            </div>
             <input
               type="text"
-
-              placeholder="Search here..."
-              className="w-full py-2 pr-10 pl-4 text-[14px] text-[#5F5F5F] font-normal border border-[#E5E5E5] rounded-[50px] bg-[#FAF9F9] focus:outline-none"
+              placeholder="Search anything..."
+              className="w-full py-2.5 pl-10 pr-4 text-[13px] font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all placeholder:text-slate-400 shadow-inner"
               value={localSearch}
-              onChange={(e) => {
-                setLocalSearch(e.target.value);
-              }}
+              onChange={(e) => setLocalSearch(e.target.value)}
             />
-            <i className="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-[#5F5F5F]"></i>
           </div>
         </div>
 
-        {/* Right: Icons + Profile */}
-        <div className="flex items-center gap-3 relative">
+        {/* Right: Notifications + Profile */}
+        <div className="flex items-center gap-4 relative">
+          
+          <button className="relative p-2 text-slate-500 hover:text-brand-900 hover:bg-brand-50 rounded-full transition-colors cursor-pointer">
+            <FiBell className="w-5 h-5 stroke-[2.5]" />
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full"></span>
+          </button>
 
+          <div className="w-px h-6 bg-slate-200 mx-1 hidden sm:block"></div>
 
-          {/* <IoNotificationsOutline onClick={()=>navigate("/notifications")} className="cursor-pointer" size={22} /> */}
-
-
-          {/* Profile Button */}
+          {/* Profile Dropdown */}
           <div
-            className="pl-5 flex items-center gap-2 bg-[#0f6845] text-[#FFFFFF] rounded-tl-[8px] rounded-bl-[8px] rounded-tr-[50px] rounded-br-[50px] cursor-pointer relative"
+            className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-full cursor-pointer hover:bg-slate-50 transition-colors"
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             ref={menuRef}
           >
-            <span className="text-[16px] font-regular">{title?.name ? title?.name : "Admin"}</span>
-            <img
-              src={"profile.svg"}
-              alt="Profile"
-              className="w-8 h-8 rounded-full object-cover"
-            />
+            <div className="hidden sm:flex flex-col items-end">
+              <span className="text-[13px] font-bold text-slate-700 leading-none">{user?.name || "Admin"}</span>
+              <span className="text-[11px] font-medium text-slate-500 mt-1">Super Admin</span>
+            </div>
+            
+            <div className="relative w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden">
+              <img
+                src={"/profile.svg"}
+                alt="Profile"
+                onError={(e) => { e.target.style.display = 'none'; }}
+                className="w-full h-full object-cover"
+              />
+              <FiUser className="w-5 h-5 text-brand-600 absolute -z-10" />
+            </div>
+            <FiChevronDown className="w-4 h-4 text-slate-400" />
 
             {/* Dropdown Menu */}
             {isProfileMenuOpen && (
-              <div ref={menuRef}
-                className="absolute right-0 md:right-[20px] top-[58px] bg-white rounded-[8px] shadow-lg z-50"
-                style={{
-                  width: "250px",
-                  minWidth: "250px",
-                  padding: "16px",
-                }}
-              >    <ul className="flex flex-col text-[16px] font-regular text-[#1E1E1E]">
-                  {[
-                    // { label: "Edit Profile", link: "/edit-profile" },
-                    { label: "Change Password", link: "/change-password" },
-                    // { label: "Bank Account Details", link: "/bank-details" },
-                    // { label: "Contact Us", link: "/contact" },
-                    // { label: "About Us", link: "/about" },
-                    // { label: "Term & Condition", link: "/terms" },
-                    // { label: "Privacy Policy", link: "/privacy" },
-                  ].map((item, index) => (
-                    <li
-                      key={index}
-                      className="py-4 px-4 hover:bg-[#F3EBDE] cursor-pointer border-[#E5E5E5] border-b last:border-b-0"
-                      onClick={() => {
-                        setIsProfileMenuOpen(false);
-                        navigate(item.link);
-                      }}
-                    >
-                      {item.label}
-                    </li>
-                  ))}
-                </ul>
+              <div className="absolute right-0 top-[60px] w-56 bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden z-50 animate-fade-in origin-top-right">
+                <div className="px-4 py-3 bg-slate-50 border-b border-slate-100 sm:hidden">
+                  <p className="text-sm font-bold text-slate-800">{user?.name || "Admin"}</p>
+                  <p className="text-xs text-slate-500">Super Admin</p>
+                </div>
+                
+                <div className="p-2">
+                  <button
+                    onClick={() => {
+                      setIsProfileMenuOpen(false);
+                      navigate("/change-password");
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-[13px] font-semibold text-slate-600 hover:text-brand-900 hover:bg-brand-50 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <FiSettings className="w-4 h-4" />
+                    Change Password
+                  </button>
+                  
+                  <div className="h-px bg-slate-100 my-1"></div>
+                  
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-[13px] font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <FiLogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </div>
               </div>
             )}
           </div>

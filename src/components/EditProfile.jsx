@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { getPharmacyProfile, updatePharmacyProfile } from "../../services/Admin/adminServices";
 import { toast } from "react-toastify";
 import { uploadFileToFirebase } from "../utils/imageUpload";
-import { ThreeDots } from "react-loader-spinner";
+
 import { loginSuccess } from "../store/profileSlice";
 import { useDispatch } from "react-redux";
 
@@ -149,15 +149,9 @@ const EditProfile = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center py-10 w-full">
-      <ThreeDots
-        height="60"
-        width="60"
-        radius="9"
-        visible={true}
-        ariaLabel="loading"
-        color="#298E9E"
-      />
+    return <div className="flex flex-col justify-center items-center py-20 w-full">
+      <div className="w-10 h-10 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin mb-3"></div>
+      <span className="text-sm text-slate-400 font-medium">Loading profile...</span>
     </div>
   }
 
@@ -180,7 +174,7 @@ const EditProfile = () => {
 
               {imgUploading && (
                 <div className="absolute bg-[#ffffffb7] rounded-full w-32 h-32 flex items-center justify-center">
-                  <ThreeDots height="40" width="40" radius="9" color="#298E9E" />
+                  <div className="w-8 h-8 border-[3px] border-slate-200 border-t-brand-600 rounded-full animate-spin"></div>
                 </div>
               )}
             </label>

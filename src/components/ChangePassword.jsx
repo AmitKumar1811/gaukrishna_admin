@@ -153,7 +153,7 @@ const ChangePassword = () => {
             {/* SUBMIT BUTTON */}
             <button
               type="submit"
-              className="w-full cursor-pointer bg-[#0f6845] text-[#FFFFFF] text-[14px] font-medium py-3 rounded-[100px]"
+              className="w-full cursor-pointer bg-brand-600 text-[#FFFFFF] text-[14px] font-medium py-3 rounded-[100px]"
             >
               Update Password
             </button>

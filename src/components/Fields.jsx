@@ -8,7 +8,7 @@ export const FormField = ({ label, ...props }) => (
     <label className="text-sm font-medium">{label}</label>
     <Field
       {...props}
-      className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845] outline-none placeholder:text-gray-400 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
+      className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-600 outline-none placeholder:text-gray-400 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
     />
     <ErrorMessage
       name={props.name}
@@ -24,7 +24,7 @@ export const TextArea = ({ label, ...props }) => (
     <Field
       as="textarea"
       {...props}
-      className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 min-h-[90px] focus:ring-2 focus:ring-[#0f6845] placeholder:text-gray-400"
+      className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 min-h-[90px] focus:ring-2 focus:ring-brand-600 placeholder:text-gray-400"
     />
     <ErrorMessage
       name={props.name}
@@ -40,7 +40,7 @@ export const SelectField = ({ label, children, ...props }) => (
     <Field
       as="select"
       {...props}
-      className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845] disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
+      className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-600 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
     >
       {children}
     </Field>
@@ -64,7 +64,7 @@ export const HybridSelect = ({ label, name, options }) => (
           list={`${name}-list`}
           value={field.value}
           onChange={(e) => form.setFieldValue(name, e.target.value)}
-          className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845] placeholder:text-gray-400"
+          className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-600 placeholder:text-gray-400"
           placeholder={`Select or type ${label}`}
         />
 
@@ -144,7 +144,7 @@ const TagsDropdown = ({ name, label, options }) => (
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-[#F3E8FF] text-[#0f6845] px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-[#F3E8FF] text-brand-600 px-3 py-1 rounded-full text-sm flex items-center gap-2"
               >
                 {tag}
                 <button
@@ -173,7 +173,7 @@ const TagsDropdown = ({ name, label, options }) => (
               }
             }}
             placeholder="Select or add tag"
-            className="mt-2 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845] placeholder:text-gray-400"
+            className="mt-2 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-600 placeholder:text-gray-400"
           />
 
           {/* Dropdown */}
@@ -196,7 +196,7 @@ const TagsDropdown = ({ name, label, options }) => (
             <button
               type="button"
               onClick={() => addTag(input)}
-              className="mt-2 text-sm text-[#0f6845] font-medium"
+              className="mt-2 text-sm text-brand-600 font-medium"
             >
               + Add “{input}”
             </button>
@@ -271,7 +271,7 @@ export const ProgramTagsDropdown = ({ name, label, options }) => (
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-[#F3E8FF] text-[#0f6845] px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-[#F3E8FF] text-brand-600 px-3 py-1 rounded-full text-sm flex items-center gap-2"
               >
                 {tag}
                 <button
@@ -300,7 +300,7 @@ export const ProgramTagsDropdown = ({ name, label, options }) => (
               }
             }}
             placeholder="Select or add tag"
-            className="mt-2 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#0f6845] placeholder:text-gray-400"
+            className="mt-2 w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-600 placeholder:text-gray-400"
           />
 
           {/* Dropdown */}
@@ -323,7 +323,7 @@ export const ProgramTagsDropdown = ({ name, label, options }) => (
             <button
               type="button"
               onClick={() => addTag(input)}
-              className="mt-2 text-sm text-[#0f6845] font-medium"
+              className="mt-2 text-sm text-brand-600 font-medium"
             >
               + Add “{input}”
             </button>
