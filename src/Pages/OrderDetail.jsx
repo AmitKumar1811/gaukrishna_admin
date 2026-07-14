@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../../services/AxiosInstance";
 import { ORDERS } from "../../services/Admin/adminEndPoints";
 import { toast } from "react-toastify";
-import { FiArrowLeft, FiPackage, FiMapPin, FiPhone, FiMail, FiUser, FiCheckCircle, FiSettings, FiTruck, FiMap, FiCreditCard } from "react-icons/fi";
+import { FiArrowLeft, FiPackage, FiMapPin, FiPhone, FiMail, FiUser, FiCheckCircle, FiSettings, FiTruck, FiMap, FiCreditCard, FiPrinter } from "react-icons/fi";
 
 const OrderDetail = () => {
     const { id } = useParams();
@@ -33,6 +33,18 @@ const OrderDetail = () => {
         try {
             await api.patch(`admin/${ORDERS}/${id}/status`, { status: newStatus });
             toast.success(`Order status updated to ${newStatus}`);
+            
+            // Automatically generate Delhivery shipment if confirmed
+            if (newStatus === "confirmed" && !order?.delhiveryWaybill) {
+                try {
+                    await api.post(`admin/${ORDERS}/${id}/delhivery/shipment`);
+                    toast.success("Delhivery shipment created successfully");
+                } catch (delhiveryError) {
+                    console.error("Delhivery generation error:", delhiveryError);
+                    toast.error(delhiveryError.response?.data?.message || "Status updated, but failed to create Delhivery shipment");
+                }
+            }
+            
             fetchOrderDetails(); // Refresh data
         } catch (error) {
             console.error(error);
@@ -61,6 +73,15 @@ const OrderDetail = () => {
             toast.error(error.response?.data?.message || "Failed to track shipment");
         }
     };
+
+    const handlePrintWaybill = async () => {
+        window.open(`/print-waybill/${id}`, "_blank");
+    };
+
+    const handlePrintInvoice = () => {
+        window.open(`/print-invoice/${id}`, "_blank");
+    };
+
 
     const getStatusStyle = (status) => {
         switch (status?.toLowerCase()) {
@@ -120,6 +141,14 @@ const OrderDetail = () => {
                                 <span>{new Date(order.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                             </div>
                         </div>
+                    </div>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handlePrintInvoice}
+                            className="px-4 py-2 bg-white text-slate-800 rounded-xl font-bold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2"
+                        >
+                            <FiPrinter /> Print Invoice
+                        </button>
                     </div>
                 </div>
 
@@ -337,12 +366,20 @@ const OrderDetail = () => {
                                             </p>
                                         </div>
                                         
-                                        <button
-                                            onClick={handleTrackShipment}
-                                            className="w-full py-3 rounded-xl bg-white text-indigo-900 text-sm font-bold shadow-md hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2 group"
-                                        >
-                                            <FiMap className="group-hover:animate-bounce" /> Track Shipment
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={handleTrackShipment}
+                                                className="flex-1 py-3 rounded-xl bg-white text-indigo-900 text-sm font-bold shadow-md hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2 group"
+                                            >
+                                                <FiMap className="group-hover:animate-bounce" /> Track Shipment
+                                            </button>
+                                            <button
+                                                onClick={handlePrintWaybill}
+                                                className="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-bold shadow-md hover:bg-indigo-500 transition-all active:scale-95 flex items-center justify-center gap-2 group"
+                                            >
+                                                <FiPrinter className="group-hover:scale-110 transition-transform" /> Print Waybill
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </div>

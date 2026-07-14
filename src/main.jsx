@@ -24,6 +24,8 @@ import Blogs from './Pages/Blogs.jsx';
 import Transactions from './Pages/Transactions.jsx';
 import OrderDetail from './Pages/OrderDetail.jsx';
 import ContactUs from './Pages/ContactUs.jsx';
+import PrintInvoice from './Pages/PrintInvoice.jsx';
+import PrintWaybill from './Pages/PrintWaybill.jsx';
 
 const PrivateRoute = ({ children }) => {
   const token = useSelector((state) => state.auth.token);
@@ -78,6 +80,8 @@ function Root() {
             <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
             <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
             <Route path="/orders/:id" element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
+            <Route path="/print-invoice/:id" element={<PrivateRoute><PrintInvoice /></PrivateRoute>} />
+            <Route path="/print-waybill/:id" element={<PrivateRoute><PrintWaybill /></PrivateRoute>} />
             <Route path="/blogs" element={<PrivateRoute><Blogs /></PrivateRoute>} />
             <Route path="/transactions" element={<PrivateRoute><Transactions /></PrivateRoute>} />
             <Route path="/contact-us" element={<PrivateRoute><ContactUs /></PrivateRoute>} />

@@ -6,7 +6,6 @@ const axiosInstance = axios.create({
 });
 
 
-
 axiosInstance.interceptors.request.use(
   (config) => {
     const state = store.getState();
@@ -16,7 +15,6 @@ axiosInstance.interceptors.request.use(
       config.headers["Authorization"] = `Bearer ${token}`;
     }
 
-    // Set Content-Type based on data type
     if (config.data instanceof FormData) {
       if (config.headers.delete) {
         config.headers.delete("Content-Type");
