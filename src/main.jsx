@@ -21,6 +21,8 @@ import AddEditProduct from './Pages/AddEditProduct.jsx';
 import Categories from './Pages/Categories.jsx';
 import Orders from './Pages/Orders.jsx';
 import Blogs from './Pages/Blogs.jsx';
+import AddEditBlog from './Pages/AddEditBlog.jsx';
+import BlogDetail from './Pages/BlogDetail.jsx';
 import Transactions from './Pages/Transactions.jsx';
 import OrderDetail from './Pages/OrderDetail.jsx';
 import ContactUs from './Pages/ContactUs.jsx';
@@ -85,6 +87,9 @@ function Root() {
             <Route path="/print-invoice/:id" element={<PrivateRoute><PrintInvoice /></PrivateRoute>} />
             <Route path="/print-waybill/:id" element={<PrivateRoute><PrintWaybill /></PrivateRoute>} />
             <Route path="/blogs" element={<PrivateRoute><Blogs /></PrivateRoute>} />
+            <Route path="/blogs/add" element={<PrivateRoute><AddEditBlog /></PrivateRoute>} />
+            <Route path="/blogs/edit/:id" element={<PrivateRoute><AddEditBlog /></PrivateRoute>} />
+            <Route path="/blogs/:id" element={<PrivateRoute><BlogDetail /></PrivateRoute>} />
             <Route path="/transactions" element={<PrivateRoute><Transactions /></PrivateRoute>} />
             <Route path="/contact-us" element={<PrivateRoute><ContactUs /></PrivateRoute>} />
 
