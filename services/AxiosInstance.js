@@ -2,7 +2,7 @@ import axios from "axios";
 import { store } from "../src/store/store";
 
 const axiosInstance = axios.create({
-  baseURL: `https://backend-gau.onrender.com/api/v1`,
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://backend-gau.onrender.com/api/v1",
 });
 
 

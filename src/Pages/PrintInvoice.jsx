@@ -13,7 +13,7 @@ const PrintInvoice = () => {
     useEffect(() => {
         const fetchOrderDetails = async () => {
             try {
-                const response = await api.get(`admin/${ORDERS}/${id}`);
+                const response = await api.get(`${ORDERS}/${id}`);
                 setOrder(response.data.data || response.data);
             } catch (error) {
                 console.error(error);

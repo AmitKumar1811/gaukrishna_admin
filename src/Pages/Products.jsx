@@ -6,6 +6,7 @@ import { setCategories } from "../store/categorySlice";
 import api from "../../services/AxiosInstance";
 import { PRODUCTS, CATEGORIES } from "../../services/Admin/adminEndPoints";
 import { toast } from "react-toastify";
+import Pagination from "../components/Pagiantion";
 import { FiMoreVertical, FiEdit2, FiTrash2, FiImage, FiX } from "react-icons/fi";
 
 const Products = () => {
@@ -13,7 +14,9 @@ const Products = () => {
     const navigate = useNavigate();
     const { products, loading } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.categories);
-    // Confirmation Modal and Dropdown State
+    const [page, setPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const limit = 10;
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
     const [activeDropdown, setActiveDropdown] = useState(null);
@@ -30,12 +33,25 @@ const Products = () => {
         dispatch(setLoading(true));
         try {
             const [prodRes, catRes] = await Promise.all([
-                api.get(PRODUCTS),
+                api.get(`${PRODUCTS}?page=${page}&limit=${limit}`),
                 categories.length === 0 ? api.get(CATEGORIES) : Promise.resolve(null)
             ]);
-            
-            const productData = prodRes.data?.data?.products || prodRes.data?.data || [];
-            dispatch(setProducts(Array.isArray(productData) ? productData : []));
+
+            const payload = prodRes.data;
+            const rawProducts = payload?.data?.products
+                || (Array.isArray(payload?.data) ? payload.data : null)
+                || (Array.isArray(payload) ? payload : [])
+                || [];
+            const productData = Array.isArray(rawProducts) ? rawProducts : [];
+            const total = Number(payload?.total ?? payload?.data?.total);
+            const serverPaginated = Number.isFinite(total) && !Array.isArray(payload);
+
+            const pageProducts = serverPaginated
+                ? productData.slice(0, limit)
+                : productData.slice((page - 1) * limit, page * limit);
+
+            dispatch(setProducts(pageProducts));
+            setTotalItems(serverPaginated ? total : productData.length);
 
             if (catRes) {
                 const categoryData = Array.isArray(catRes.data) 
@@ -65,9 +81,17 @@ const Products = () => {
         return "Uncategorized";
     };
 
+    const totalPages = Math.ceil(totalItems / limit);
+
     useEffect(() => {
         fetchData();
-    }, [dispatch]);
+    }, [dispatch, page]);
+
+    useEffect(() => {
+        if (totalPages > 0 && page > totalPages) {
+            setPage(totalPages);
+        }
+    }, [page, totalPages]);
 
     const handleOpenAdd = () => {
         navigate("/products/add");
@@ -88,8 +112,10 @@ const Products = () => {
         try {
             await api.delete(`${PRODUCTS}/${productToDelete._id || productToDelete.id}`);
             dispatch(deleteProduct(productToDelete._id || productToDelete.id));
+            setTotalItems((prev) => Math.max(0, prev - 1));
             toast.success("Product deleted successfully");
             setIsConfirmOpen(false);
+            await fetchData();
         } catch (error) {
             console.error(error);
             toast.error("Failed to delete product");
@@ -112,9 +138,9 @@ const Products = () => {
                     <div>
                         <div className="flex items-center gap-3">
                             <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Products</h1>
-                            {!loading && products.length > 0 && (
+                            {!loading && totalItems > 0 && (
                                 <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-700 uppercase tracking-wider">
-                                    {products.length} {products.length === 1 ? "Product" : "Products"}
+                                    {totalItems} {totalItems === 1 ? "Product" : "Products"}
                                 </span>
                             )}
                         </div>
@@ -234,6 +260,18 @@ const Products = () => {
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <p className="text-xs font-medium text-slate-500">
+                            {totalItems === 0
+                                ? "No products"
+                                : `Showing ${Math.min((page - 1) * limit + 1, totalItems)}-${Math.min(page * limit, totalItems)} of ${totalItems} products`}
+                        </p>
+                        <Pagination
+                            pageCount={totalPages}
+                            pageValue={page - 1}
+                            setPage={(p) => setPage(p + 1)}
+                        />
                     </div>
                 </div>
             </div>

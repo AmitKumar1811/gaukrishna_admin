@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
+  const [trendRange, setTrendRange] = useState("weekly");
   const isMountedRef = useRef(true);
 
   const fetchDashboardStats = useCallback(async ({ silent = false } = {}) => {
@@ -80,6 +81,11 @@ const Dashboard = () => {
     if (!lastUpdatedAt) return "";
     return lastUpdatedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }, [lastUpdatedAt]);
+
+  const salesTrend = useMemo(() => {
+    const points = stats?.graphs?.salesTrend || [];
+    return trendRange === "weekly" ? points.slice(-7) : points;
+  }, [stats?.graphs?.salesTrend, trendRange]);
 
   if (initialLoading) {
     return (
@@ -151,9 +157,31 @@ const Dashboard = () => {
           
           {/* Sales Trend Chart */}
           <div className="bg-white p-6 rounded-2xl shadow-card border border-slate-100">
-            <h3 className="font-bold text-slate-800 text-lg mb-6 tracking-tight">Sales & Orders Trend</h3>
+            <div className="flex items-center justify-between gap-3 mb-6">
+              <h3 className="font-bold text-slate-800 text-lg tracking-tight">Sales & Orders Trend</h3>
+              <div className="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
+                {[
+                  { key: "weekly", label: "Weekly" },
+                  { key: "monthly", label: "Monthly" },
+                ].map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => setTrendRange(option.key)}
+                    className={`px-3 py-1.5 rounded-md text-[12px] font-bold transition-all ${
+                      trendRange === option.key
+                        ? "bg-brand-600 text-white shadow-sm"
+                        : "text-slate-500 hover:text-slate-700"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="h-72">
               <Chart
+                key={trendRange}
                 options={{
                   chart: {
                     type: 'area',
@@ -169,7 +197,7 @@ const Dashboard = () => {
                   dataLabels: { enabled: false },
                   stroke: { curve: 'smooth', width: 3 },
                   xaxis: {
-                    categories: (stats?.graphs?.salesTrend || []).map(item => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+                    categories: salesTrend.map(item => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
                     labels: { style: { colors: '#64748b', fontWeight: 500 } },
                     axisBorder: { show: false },
                     axisTicks: { show: false }
@@ -193,8 +221,8 @@ const Dashboard = () => {
                   }
                 }}
                 series={[
-                  { name: 'Revenue (₹)', data: (stats?.graphs?.salesTrend || []).map(item => item.revenue) },
-                  { name: 'Orders', data: (stats?.graphs?.salesTrend || []).map(item => item.orders) }
+                  { name: 'Revenue (₹)', data: salesTrend.map(item => item.revenue) },
+                  { name: 'Orders', data: salesTrend.map(item => item.orders) }
                 ]}
                 type="area"
                 height="100%"

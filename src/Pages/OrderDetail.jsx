@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../services/AxiosInstance";
-import { ORDERS } from "../../services/Admin/adminEndPoints";
+import { orderById, orderStatus, orderShipment, orderTrack } from "../../services/Admin/adminEndPoints";
 import { toast } from "react-toastify";
 import { FiArrowLeft, FiPackage, FiMapPin, FiPhone, FiMail, FiUser, FiCheckCircle, FiSettings, FiTruck, FiMap, FiCreditCard, FiPrinter } from "react-icons/fi";
 
@@ -10,18 +10,19 @@ const OrderDetail = () => {
     const navigate = useNavigate();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [actionLoading, setActionLoading] = useState("");
 
-    const fetchOrderDetails = async () => {
+    const fetchOrderDetails = async ({ silent = false } = {}) => {
         try {
-            setLoading(true);
-            const response = await api.get(`admin/${ORDERS}/${id}`);
+            if (!silent) setLoading(true);
+            const response = await api.get(orderById(id));
             setOrder(response.data.data || response.data);
         } catch (error) {
             console.error(error);
             toast.error("Failed to fetch order details");
             navigate("/orders");
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     };
 
@@ -29,48 +30,52 @@ const OrderDetail = () => {
         fetchOrderDetails();
     }, [id]);
 
+    const waybill = order?.delhiveryWaybill || order?.shipmentWaybill;
+
     const handleStatusUpdate = async (newStatus) => {
         try {
-            await api.patch(`admin/${ORDERS}/${id}/status`, { status: newStatus });
+            setActionLoading(newStatus);
+            await api.patch(orderStatus(id), { status: newStatus });
             toast.success(`Order status updated to ${newStatus}`);
-            
-            // Automatically generate Delhivery shipment if confirmed
-            if (newStatus === "confirmed" && !order?.delhiveryWaybill) {
-                try {
-                    await api.post(`admin/${ORDERS}/${id}/delhivery/shipment`);
-                    toast.success("Delhivery shipment created successfully");
-                } catch (delhiveryError) {
-                    console.error("Delhivery generation error:", delhiveryError);
-                    toast.error(delhiveryError.response?.data?.message || "Status updated, but failed to create Delhivery shipment");
-                }
-            }
-            
-            fetchOrderDetails(); // Refresh data
+            await fetchOrderDetails({ silent: true });
         } catch (error) {
             console.error(error);
             toast.error(error.response?.data?.message || "Failed to update order status");
+        } finally {
+            setActionLoading("");
         }
     };
 
     const handleGenerateWaybill = async () => {
         try {
-            await api.post(`admin/${ORDERS}/${id}/delhivery/shipment`);
+            setActionLoading("shipment");
+            await api.post(orderShipment(id));
             toast.success("Waybill generated successfully");
-            fetchOrderDetails();
+            await fetchOrderDetails({ silent: true });
         } catch (error) {
             console.error(error);
             toast.error(error.response?.data?.message || "Failed to generate waybill");
+        } finally {
+            setActionLoading("");
         }
     };
 
     const handleTrackShipment = async () => {
         try {
-            const response = await api.get(`admin/${ORDERS}/${id}/delhivery/track`);
-            toast.success(`Tracking Status: ${response.data.status}`);
-            fetchOrderDetails();
+            setActionLoading("track");
+            const response = await api.get(orderTrack(id));
+            const nextOrderStatus = response.data.orderStatus;
+            toast.success(
+                nextOrderStatus
+                    ? `Tracking: ${response.data.status} · Order status: ${nextOrderStatus}`
+                    : `Tracking Status: ${response.data.status}`
+            );
+            await fetchOrderDetails({ silent: true });
         } catch (error) {
             console.error(error);
             toast.error(error.response?.data?.message || "Failed to track shipment");
+        } finally {
+            setActionLoading("");
         }
     };
 
@@ -94,6 +99,37 @@ const OrderDetail = () => {
             case "delivered": return "bg-green-100/50 text-green-700 border-green-200/50";
             case "cancelled": return "bg-rose-100/50 text-rose-700 border-rose-200/50";
             default: return "bg-slate-100/50 text-slate-700 border-slate-200/50";
+        }
+    };
+
+    const getStatusActions = (status) => {
+        switch (status?.toLowerCase()) {
+            case "paid":
+                return [
+                    { next: "confirmed", label: "Confirm", className: "bg-slate-900 hover:bg-slate-800 text-white", icon: FiCheckCircle },
+                    { next: "cancelled", label: "Cancel", className: "bg-rose-600 hover:bg-rose-500 text-white", icon: FiSettings }
+                ];
+            case "confirmed":
+                return [
+                    { next: "processing", label: "Process", className: "bg-blue-600 hover:bg-blue-500 text-white", icon: FiSettings },
+                    { next: "cancelled", label: "Cancel", className: "bg-rose-600 hover:bg-rose-500 text-white", icon: FiSettings }
+                ];
+            case "processing":
+                return [
+                    { next: "packing", label: "Pack", className: "bg-purple-600 hover:bg-purple-500 text-white", icon: FiPackage },
+                    { next: "cancelled", label: "Cancel", className: "bg-rose-600 hover:bg-rose-500 text-white", icon: FiSettings }
+                ];
+            case "packing":
+                return [
+                    { next: "shipped", label: "Ship", className: "bg-orange-600 hover:bg-orange-500 text-white", icon: FiTruck },
+                    { next: "cancelled", label: "Cancel", className: "bg-rose-600 hover:bg-rose-500 text-white", icon: FiSettings }
+                ];
+            case "shipped":
+                return [
+                    { next: "delivered", label: "Mark Delivered", className: "bg-emerald-600 hover:bg-emerald-500 text-white", icon: FiCheckCircle }
+                ];
+            default:
+                return [];
         }
     };
 
@@ -242,31 +278,27 @@ const OrderDetail = () => {
                                         </div>
                                     </div>
 
-                                    {(order.orderStatus?.toLowerCase() === "paid" || order.status?.toLowerCase() === "paid") && (
-                                        <div className="flex gap-3 w-full md:w-auto">
-                                            <button
-                                                onClick={() => handleStatusUpdate("confirmed")}
-                                                className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2"
-                                            >
-                                                <FiCheckCircle /> Confirm
-                                            </button>
-                                            <button
-                                                onClick={() => handleStatusUpdate("processing")}
-                                                className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2"
-                                            >
-                                                <FiSettings className="animate-spin-slow" /> Process
-                                            </button>
+                                    {getStatusActions(order.orderStatus || order.status).length > 0 && (
+                                        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+                                            {getStatusActions(order.orderStatus || order.status).map((action) => {
+                                                const Icon = action.icon;
+                                                return (
+                                                    <button
+                                                        key={action.next}
+                                                        onClick={() => handleStatusUpdate(action.next)}
+                                                        disabled={Boolean(actionLoading)}
+                                                        className={`flex-1 md:flex-none px-6 py-3 rounded-xl text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed ${action.className}`}
+                                                    >
+                                                        <Icon /> {actionLoading === action.next ? `${action.label}...` : action.label}
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </div>
-                                {(order.orderStatus?.toLowerCase() !== "paid" && order.status?.toLowerCase() !== "paid") && (
-                                    <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-                                        <FiSettings className="text-slate-400 mt-0.5" />
-                                        <p className="text-sm text-slate-500">
-                                            The status of this order is currently being managed externally (e.g., via delivery webhooks) or is in a state that doesn't require immediate manual intervention.
-                                        </p>
-                                    </div>
-                                )}
+                                <p className="mt-6 text-sm text-slate-500">
+                                    Changing status here updates the order for the customer immediately. Generating a waybill or tracking a shipment also syncs delivery status to the same order status.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -327,11 +359,11 @@ const OrderDetail = () => {
                             <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl"></div>
                             
                             <h3 className="text-sm font-bold text-indigo-200 uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10">
-                                <FiTruck className="text-indigo-400" /> Delhivery Logistics
+                                <FiTruck className="text-indigo-400" /> Delivery Management
                             </h3>
                             
                             <div className="space-y-4 relative z-10">
-                                {!order.delhiveryWaybill ? (
+                                {!waybill ? (
                                     <div className="text-center py-4">
                                         <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
                                             <FiPackage className="w-8 h-8 text-indigo-300 opacity-50" />
@@ -339,9 +371,10 @@ const OrderDetail = () => {
                                         <p className="text-sm text-indigo-200 mb-4">No shipment created yet.</p>
                                         <button
                                             onClick={handleGenerateWaybill}
-                                            className="w-full py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                            disabled={Boolean(actionLoading)}
+                                            className="w-full py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                                         >
-                                            Generate Waybill
+                                            {actionLoading === "shipment" ? "Creating shipment..." : "Generate Waybill"}
                                         </button>
                                     </div>
                                 ) : (
@@ -349,7 +382,7 @@ const OrderDetail = () => {
                                         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
                                             <p className="text-xs text-indigo-300 font-medium mb-1">Waybill Number (AWB)</p>
                                             <div className="flex items-center justify-between">
-                                                <p className="text-lg font-bold font-mono tracking-wider">{order.delhiveryWaybill}</p>
+                                                <p className="text-lg font-bold font-mono tracking-wider">{waybill}</p>
                                                 <button className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
                                                     <svg className="w-4 h-4 text-indigo-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -369,7 +402,8 @@ const OrderDetail = () => {
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={handleTrackShipment}
-                                                className="flex-1 py-3 rounded-xl bg-white text-indigo-900 text-sm font-bold shadow-md hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2 group"
+                                                disabled={Boolean(actionLoading)}
+                                                className="flex-1 py-3 rounded-xl bg-white text-indigo-900 text-sm font-bold shadow-md hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed"
                                             >
                                                 <FiMap className="group-hover:animate-bounce" /> Track Shipment
                                             </button>

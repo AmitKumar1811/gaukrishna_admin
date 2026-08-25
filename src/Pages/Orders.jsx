@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import Pagination from "../components/Pagiantion";
 
 import { useNavigate } from "react-router-dom";
-import { FiMoreVertical, FiEye, FiShoppingBag } from "react-icons/fi";
+import { FiEye, FiShoppingBag } from "react-icons/fi";
 
 const Orders = () => {
     const dispatch = useDispatch();
@@ -16,18 +16,22 @@ const Orders = () => {
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const limit = 10;
-    
-    // Dropdown state
-    const [activeDropdown, setActiveDropdown] = useState(null);
 
     const fetchOrders = async () => {
         dispatch(setLoading(true));
         try {
-            const response = await api.get(`admin/${ORDERS}?page=${page}&limit=${limit}`);
-            // Extract from response according to the provided format
-            const orderData = Array.isArray(response.data) ? response.data : (response.data.data || []);
-            dispatch(setOrders(orderData));
-            setTotalItems(response.data.total || orderData.length || 0);
+            const response = await api.get(`${ORDERS}?page=${page}&limit=${limit}`);
+            const payload = response.data;
+            const rawOrders = Array.isArray(payload) ? payload : (payload.data || []);
+            const total = Number(payload.total);
+            const serverPaginated = !Array.isArray(payload) && Array.isArray(payload.data) && Number.isFinite(total);
+
+            const pageOrders = serverPaginated
+                ? rawOrders.slice(0, limit)
+                : rawOrders.slice((page - 1) * limit, page * limit);
+
+            dispatch(setOrders(pageOrders));
+            setTotalItems(serverPaginated ? total : rawOrders.length);
         } catch (error) {
             console.error(error);
             toast.error("Failed to fetch orders");
@@ -36,22 +40,32 @@ const Orders = () => {
         }
     };
 
+    const totalPages = Math.ceil(totalItems / limit);
+
     useEffect(() => {
         fetchOrders();
     }, [dispatch, page]);
+
+    useEffect(() => {
+        if (totalPages > 0 && page > totalPages) {
+            setPage(totalPages);
+        }
+    }, [page, totalPages]);
 
     const getStatusColor = (status) => {
         switch (status?.toLowerCase()) {
             case "pending": return "bg-gold-50 text-gold-700 border-gold-200";
             case "paid": return "bg-emerald-50 text-emerald-700 border-emerald-200";
+            case "confirmed": return "bg-blue-50 text-blue-700 border-blue-200";
+            case "processing": return "bg-brand-50 text-brand-700 border-brand-200";
+            case "packing": return "bg-purple-50 text-purple-700 border-purple-200";
+            case "shipped": return "bg-orange-50 text-orange-700 border-orange-200";
+            case "delivered":
             case "completed": return "bg-emerald-50 text-emerald-700 border-emerald-200";
             case "cancelled": return "bg-rose-50 text-rose-700 border-rose-200";
-            case "processing": return "bg-brand-50 text-brand-700 border-brand-200";
             default: return "bg-slate-100 text-slate-700 border-slate-200";
         }
     };
-
-    const totalPages = Math.ceil(totalItems / limit);
 
     return (
         <div className="p-6 md:p-8 bg-slate-50 min-h-screen animate-fade-in relative">
@@ -104,7 +118,7 @@ const Orders = () => {
                                                 {(order._id || order.id).slice(-8).toUpperCase()}
                                             </td>
                                             <td className="px-6 py-4 font-semibold text-slate-800 text-[14px]">
-                                                {order.user?.name || order.addressSnapshot?.phone || "Order Customer"}
+                                                {order.userId?.name || order.user?.name || order.addressSnapshot?.fullName || order.addressSnapshot?.phone || "Order Customer"}
                                             </td>
                                             <td className="px-6 py-4 font-bold text-slate-800 text-[14px]">₹{order.totalAmount}</td>
                                             <td className="px-6 py-4">
@@ -115,34 +129,14 @@ const Orders = () => {
                                             <td className="px-6 py-4 text-slate-500 text-[13px] font-medium">
                                                 {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                             </td>
-                                            <td className="px-6 py-4 text-right whitespace-nowrap relative">
+                                            <td className="px-6 py-4 text-right whitespace-nowrap">
                                                 <button
-                                                    onClick={() => setActiveDropdown(activeDropdown === (order._id || order.id) ? null : (order._id || order.id))}
+                                                    onClick={() => navigate(`/orders/${order._id || order.id}`)}
+                                                    title="View Details"
                                                     className="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition-all focus:outline-none cursor-pointer"
                                                 >
-                                                    <FiMoreVertical className="w-5 h-5" />
+                                                    <FiEye className="w-5 h-5" />
                                                 </button>
-                                                
-                                                {activeDropdown === (order._id || order.id) && (
-                                                    <>
-                                                        <div 
-                                                            className="fixed inset-0 z-10"
-                                                            onClick={() => setActiveDropdown(null)}
-                                                        ></div>
-                                                        <div className="absolute right-8 top-10 w-40 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-slate-100/50 py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150">
-                                                            <button
-                                                                onClick={() => {
-                                                                    navigate(`/orders/${order._id || order.id}`);
-                                                                    setActiveDropdown(null);
-                                                                }}
-                                                                className="w-full text-left px-4 py-2.5 text-[13px] text-slate-700 hover:bg-slate-50 hover:text-brand-600 transition-colors flex items-center gap-2.5 font-semibold cursor-pointer"
-                                                            >
-                                                                <FiEye className="w-4 h-4" />
-                                                                View Details
-                                                            </button>
-                                                        </div>
-                                                    </>
-                                                )}
                                             </td>
                                         </tr>
                                     ))
@@ -150,8 +144,12 @@ const Orders = () => {
                             </tbody>
                         </table>
                     </div>
-                    {/* Pagination */}
-                    <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+                    <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <p className="text-xs font-medium text-slate-500">
+                            {totalItems === 0
+                                ? "No orders"
+                                : `Showing ${Math.min((page - 1) * limit + 1, totalItems)}-${Math.min(page * limit, totalItems)} of ${totalItems} orders`}
+                        </p>
                         <Pagination
                             pageCount={totalPages}
                             pageValue={page - 1}

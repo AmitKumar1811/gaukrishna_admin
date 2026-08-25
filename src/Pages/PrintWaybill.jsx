@@ -13,7 +13,7 @@ const PrintWaybill = () => {
     useEffect(() => {
         const fetchLabel = async () => {
             try {
-                const response = await api.get(`admin/${ORDERS}/${id}/delhivery/label`);
+                const response = await api.get(`${ORDERS}/${id}/delhivery/label`);
                 if (response.data && response.data.label) {
                     setLabelData(response.data.label);
                 } else {

@@ -10,6 +10,7 @@ import orderReducer from "./orderSlice";
 import transactionReducer from "./transactionSlice";
 import userReducer from "./userSlice";
 import contactReducer from "./contactSlice";
+import couponReducer from "./couponSlice";
 
 
 const persistConfig = {
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   transactions: transactionReducer,
   users: userReducer,
   contacts: contactReducer,
+  coupons: couponReducer,
 });
 
 

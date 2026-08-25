@@ -26,6 +26,7 @@ import OrderDetail from './Pages/OrderDetail.jsx';
 import ContactUs from './Pages/ContactUs.jsx';
 import PrintInvoice from './Pages/PrintInvoice.jsx';
 import PrintWaybill from './Pages/PrintWaybill.jsx';
+import Coupons from './Pages/Coupons.jsx';
 
 const PrivateRoute = ({ children }) => {
   const token = useSelector((state) => state.auth.token);
@@ -78,6 +79,7 @@ function Root() {
             <Route path="/products/add" element={<PrivateRoute><AddEditProduct /></PrivateRoute>} />
             <Route path="/products/edit/:slug" element={<PrivateRoute><AddEditProduct /></PrivateRoute>} />
             <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
+            <Route path="/coupons" element={<PrivateRoute><Coupons /></PrivateRoute>} />
             <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
             <Route path="/orders/:id" element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
             <Route path="/print-invoice/:id" element={<PrivateRoute><PrintInvoice /></PrivateRoute>} />

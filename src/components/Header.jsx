@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { FiMenu, FiSearch, FiBell, FiChevronDown, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
+import { FiMenu, FiSearch, FiBell, FiChevronDown, FiSettings, FiLogOut } from "react-icons/fi";
 import { logout } from "../store/authSlice";
 import { toast } from "react-toastify";
 
@@ -88,14 +88,12 @@ export default function Header({ onMenuClick }) {
               <span className="text-[11px] font-medium text-slate-500 mt-1">Super Admin</span>
             </div>
             
-            <div className="relative w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden">
+            <div className="relative w-10 h-10 rounded-full bg-brand-100 border-2 border-white shadow-sm overflow-hidden">
               <img
-                src={"/profile.svg"}
-                alt="Profile"
-                onError={(e) => { e.target.style.display = 'none'; }}
+                src={user?.avatar || user?.photo || "/admin-avatar.png"}
+                alt={user?.name || "Admin"}
                 className="w-full h-full object-cover"
               />
-              <FiUser className="w-5 h-5 text-brand-600 absolute -z-10" />
             </div>
             <FiChevronDown className="w-4 h-4 text-slate-400" />
 

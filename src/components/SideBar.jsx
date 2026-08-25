@@ -1,31 +1,79 @@
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/authSlice";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FiGrid, FiPackage, FiLayers, FiShoppingCart, FiCreditCard, FiUsers, FiFileText, FiLifeBuoy, FiLogOut } from "react-icons/fi";
+import {
+  FiGrid,
+  FiPackage,
+  FiLayers,
+  FiShoppingCart,
+  FiCreditCard,
+  FiUsers,
+  FiFileText,
+  FiLifeBuoy,
+  FiTag,
+  FiLogOut,
+  FiChevronDown,
+} from "react-icons/fi";
 
-const menuItems = [
-  { name: "Dashboard", icon: FiGrid, key: "dashboard", path: "/" },
-  { name: "Products", icon: FiPackage, key: "products", path: "/products" },
-  { name: "Categories", icon: FiLayers, key: "categories", path: "/categories" },
-  { name: "Orders", icon: FiShoppingCart, key: "orders", path: "/orders" },
-  { name: "Transactions", icon: FiCreditCard, key: "transactions", path: "/transactions" },
-  { name: "Users", icon: FiUsers, key: "users", path: "/users" },
-  { name: "Blogs", icon: FiFileText, key: "blogs", path: "/blogs" },
-  { name: "Support", icon: FiLifeBuoy, key: "contacts", path: "/contact-us" },
+const menuGroups = [
+  {
+    id: "overview",
+    label: "Overview",
+    items: [{ name: "Dashboard", icon: FiGrid, key: "dashboard", path: "/" }],
+  },
+  {
+    id: "catalog",
+    label: "Catalog",
+    items: [
+      { name: "Products", icon: FiPackage, key: "products", path: "/products" },
+      { name: "Categories", icon: FiLayers, key: "categories", path: "/categories" },
+      { name: "Coupons", icon: FiTag, key: "coupons", path: "/coupons" },
+    ],
+  },
+  {
+    id: "logistics",
+    label: "Orders & Logistics",
+    items: [
+      { name: "Orders", icon: FiShoppingCart, key: "orders", path: "/orders" },
+      { name: "Transactions", icon: FiCreditCard, key: "transactions", path: "/transactions" },
+    ],
+  },
+  {
+    id: "community",
+    label: "Customers & Content",
+    items: [
+      { name: "Users", icon: FiUsers, key: "users", path: "/users" },
+      { name: "Blogs", icon: FiFileText, key: "blogs", path: "/blogs" },
+      { name: "Support", icon: FiLifeBuoy, key: "contacts", path: "/contact-us" },
+    ],
+  },
 ];
+
+const allItems = menuGroups.flatMap((group) => group.items);
 
 export default function SideBar({ collapsed, mobileOpen, onClose }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const [openGroups, setOpenGroups] = useState({
+    overview: true,
+    catalog: true,
+    logistics: true,
+    community: true,
+  });
 
-  const getActiveKey = () => {
-    const current = menuItems.find(item => {
-      if (item.path === '/') return location.pathname === '/';
+  const activeKey = useMemo(() => {
+    const current = allItems.find((item) => {
+      if (item.path === "/") return location.pathname === "/" || location.pathname === "/dashboard";
       return location.pathname.startsWith(item.path);
     });
     return current?.key;
+  }, [location.pathname]);
+
+  const toggleGroup = (id) => {
+    setOpenGroups((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -51,39 +99,66 @@ export default function SideBar({ collapsed, mobileOpen, onClose }) {
             )}
           </div>
 
-          <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
-            {menuItems.map((item) => {
-              const isActive = getActiveKey() === item.key;
-              const Icon = item.icon;
+          <nav className="flex-1 overflow-y-auto py-5 px-4 custom-scrollbar">
+            {menuGroups.map((group) => {
+              const isOpen = collapsed || openGroups[group.id];
               return (
-                <button
-                  key={item.key}
-                  onClick={() => {
-                    navigate(item.path);
-                    onClose && onClose();
-                  }}
-                  title={collapsed ? item.name : ""}
-                  className={`w-full flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-[13px] font-semibold transition-all duration-200 group relative
-                  ${isActive
-                      ? "bg-brand-900 text-gold-400 shadow-sm shadow-brand-950/50"
-                      : "text-brand-100/70 hover:bg-brand-900/50 hover:text-gold-300"
-                    }`}
-                >
-                  <div className={`flex items-center justify-center transition-transform group-hover:scale-110 
-                    ${isActive ? "text-gold-400" : "text-brand-100/50 group-hover:text-gold-300"}`}>
-                    <Icon className="w-5 h-5 stroke-[2.5]" />
-                  </div>
-
+                <div key={group.id} className="mb-5 last:mb-0">
                   {!collapsed && (
-                    <span className="whitespace-nowrap truncate tracking-wide">
-                      {item.name}
-                    </span>
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(group.id)}
+                      className="w-full flex items-center justify-between px-3 mb-2"
+                    >
+                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-100/45">
+                        {group.label}
+                      </span>
+                      <FiChevronDown
+                        className={`w-3.5 h-3.5 text-brand-100/35 transition-transform ${isOpen ? "rotate-0" : "-rotate-90"}`}
+                      />
+                    </button>
                   )}
-                  {isActive && !collapsed && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gold-400 rounded-r-full shadow-[0_0_8px_rgba(197,160,48,0.5)]"></div>
+
+                  {isOpen && (
+                    <div className="space-y-1.5">
+                      {group.items.map((item) => {
+                        const isActive = activeKey === item.key;
+                        const Icon = item.icon;
+                        return (
+                          <button
+                            key={item.key}
+                            onClick={() => {
+                              navigate(item.path);
+                              onClose && onClose();
+                            }}
+                            title={collapsed ? item.name : ""}
+                            className={`w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-[14px] font-bold transition-all duration-200 group relative
+                            ${collapsed ? "justify-center px-0" : ""}
+                            ${isActive
+                                ? "bg-brand-900 text-gold-400 shadow-sm shadow-brand-950/50"
+                                : "text-brand-100/70 hover:bg-brand-900/50 hover:text-gold-300"
+                              }`}
+                          >
+                            <div className={`flex items-center justify-center transition-transform group-hover:scale-110 
+                              ${isActive ? "text-gold-400" : "text-brand-100/50 group-hover:text-gold-300"}`}>
+                              <Icon className="w-5 h-5 stroke-[2.5]" />
+                            </div>
+
+                            {!collapsed && (
+                              <span className="whitespace-nowrap truncate tracking-wide">
+                                {item.name}
+                              </span>
+                            )}
+                            {isActive && !collapsed && (
+                              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gold-400 rounded-r-full shadow-[0_0_8px_rgba(197,160,48,0.5)]"></div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   )}
-                </button>
-              )
+                </div>
+              );
             })}
           </nav>
 
@@ -100,7 +175,7 @@ export default function SideBar({ collapsed, mobileOpen, onClose }) {
                 }
               }}
               title={collapsed ? "Log Out" : ""}
-              className={`w-full flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-[13px] font-semibold transition-all duration-200 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 hover:shadow-sm group ${collapsed ? "justify-center" : ""}`}
+              className={`w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-[14px] font-bold transition-all duration-200 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 hover:shadow-sm group ${collapsed ? "justify-center" : ""}`}
             >
               <div className="flex items-center justify-center transition-transform group-hover:-translate-x-0.5">
                 <FiLogOut className="w-5 h-5 stroke-[2.5] opacity-80 group-hover:opacity-100" />

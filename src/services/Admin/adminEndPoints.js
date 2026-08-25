@@ -15,6 +15,7 @@ export const BLOGS = "/admin/blogs";
 
 // Orders
 export const ORDERS = "/admin/orders";
+export const COUPONS = "/admin/coupons";
 
 // Transactions
 export const TRANSACTIONS = "/admin/transactions";
